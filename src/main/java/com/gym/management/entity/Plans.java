@@ -17,8 +17,8 @@ public class Plans extends BaseEntity {
 
     // Duration Days = Sessions.
     // Sessions remaining = duration days - traffic logs
-    private int duration_days;
+    private int durationDays;
 
-    private String plan_type;
+    private String planType;
 
 }
