@@ -1,3 +1,5 @@
+# Gym Management Application
+
 ```mermaid
 erDiagram
     USERS {
@@ -25,7 +27,6 @@ erDiagram
         int id PK
         string title
         decimal price
-        int sessions 
         int duration_days
         string plan_type "MONTHLY, SESSIONAL, VIP"
     }
