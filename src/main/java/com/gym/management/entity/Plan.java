@@ -19,6 +19,6 @@ public class Plan extends BaseEntity {
     // Sessions remaining = duration days - traffic logs
     private int durationDays;
 
-    private String planType;
+    private String planType; // MONTHLY, SESSIONAL, VIP
 
 }

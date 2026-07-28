@@ -13,9 +13,9 @@ public class Locker extends BaseEntity {
 
     private String lockerName;
 
-    private String genderSection;
+    private String genderSection; // MEN, WOMEN
 
-    private String status;
+    private String status; // EMPTY, OCCUPIED, MAINTENANCE
 
     private String hardwareIp;
 
