@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "plans")
-public class Plans extends BaseEntity {
+public class Plan extends BaseEntity {
 
     private String title;
 

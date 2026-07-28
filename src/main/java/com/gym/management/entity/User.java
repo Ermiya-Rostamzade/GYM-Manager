@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "lockers")
-public class Lockers extends BaseEntity {
+public class Locker extends BaseEntity {
 
     private String lockerName;
 
