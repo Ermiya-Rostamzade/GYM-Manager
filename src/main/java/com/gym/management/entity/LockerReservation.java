@@ -20,7 +20,8 @@ public class LockerReservation extends BaseEntity {
     @JoinColumn(name = "locker_id", nullable = false)
     private Locker locker;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // FIXME: I doubt it.
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "traffic_log_id")
     private TrafficLog trafficLog;
 
