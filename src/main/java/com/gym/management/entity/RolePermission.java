@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "roles_permissions")
 @Getter
 @Setter
+@Entity
+@Table(name = "roles_permissions")
 @NoArgsConstructor
 public class RolePermission extends BaseEntity {
 
