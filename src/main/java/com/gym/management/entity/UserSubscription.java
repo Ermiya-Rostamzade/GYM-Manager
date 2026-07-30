@@ -8,10 +8,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "user_subscriptions")
 @Getter
 @Setter
+@Entity
+@Table(name = "user_subscriptions")
 @NoArgsConstructor
 public class UserSubscription extends BaseEntity {
 

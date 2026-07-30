@@ -9,10 +9,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "payments")
 @Getter
 @Setter
+@Entity
+@Table(name = "payments")
 @NoArgsConstructor
 public class Payment extends BaseEntity {
 
