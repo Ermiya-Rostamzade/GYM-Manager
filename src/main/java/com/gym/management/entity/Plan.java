@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Plan extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)

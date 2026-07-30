@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Locker extends BaseEntity {
 
-    @Column(name = "locker_number", nullable = false)
+    @Column(name = "locker_number", nullable = false, unique = true)
     private String lockerName;
 
     @Enumerated(EnumType.STRING)
@@ -25,7 +25,7 @@ public class Locker extends BaseEntity {
     @Column(nullable = false)
     private LockerStatus status;
 
-    @Column(name = "hardware_ip", nullable = false)
+    @Column(name = "hardware_ip", nullable = false, unique = true)
     private String hardwareIp;
 
 }
