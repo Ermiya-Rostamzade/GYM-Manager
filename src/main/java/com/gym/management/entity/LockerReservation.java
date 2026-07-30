@@ -2,6 +2,7 @@ package com.gym.management.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "locker_reservations")
+@NoArgsConstructor
 public class LockerReservation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -20,15 +22,18 @@ public class LockerReservation extends BaseEntity {
     @JoinColumn(name = "locker_id", nullable = false)
     private Locker locker;
 
-    // FIXME: I doubt it.
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "traffic_log_id")
-    private TrafficLog trafficLog;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "traffic_log_id")
+//    private TrafficLog trafficLog; واقعا چرا باید ترافیک رو ربط بدیم؟
 
+    @Column(name = "assigned_at", nullable = false)
     private LocalDateTime assignedAt;
 
-    private LocalDateTime releasedAt;
+    @Column(name = "released_at")
+    private LocalDateTime releasedAt; // اگر خالی باشد یعنی بسته، اگر زمان داشته باشد یعنی اکتیو. اینطوری مدیریتش ساده تره
 
-    private String status; // ACTIVE, CLOSED
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private LockerReservationStatus status; نیازی نیست
 
 }
