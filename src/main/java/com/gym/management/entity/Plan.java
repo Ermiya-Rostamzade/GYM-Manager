@@ -1,24 +1,29 @@
 package com.gym.management.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.gym.management.entity.enums.PlanType;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "plans")
+@NoArgsConstructor
 public class Plan extends BaseEntity {
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private double price;
 
-    // Duration Days = Sessions.
-    // Sessions remaining = duration days - traffic logs
+    @Column(name = "duration_days", nullable = false)
     private int durationDays;
 
-    private String planType; // MONTHLY, SESSIONAL, VIP
+    @Enumerated(EnumType.STRING)
+    @Column(name = "plan_type", nullable = false)
+    private PlanType planType;
 
 }
