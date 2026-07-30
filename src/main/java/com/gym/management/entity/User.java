@@ -1,18 +1,19 @@
 package com.gym.management.entity;
 
+import com.gym.management.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-import com.gym.management.entity.enums.Role;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 public class User extends BaseEntity {
 
     @Column(name = "mobile_number", nullable = false, unique = true, length = 15)
@@ -36,4 +37,5 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<UserSubscription> subscriptions = new ArrayList<>();
+
 }

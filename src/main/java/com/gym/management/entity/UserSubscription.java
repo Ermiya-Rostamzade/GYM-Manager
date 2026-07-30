@@ -35,4 +35,5 @@ public class UserSubscription extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SubscriptionStatus status;
+
 }
