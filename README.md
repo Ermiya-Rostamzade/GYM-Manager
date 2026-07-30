@@ -1,5 +1,26 @@
 # Gym Management Application
 
+Project structure:
+
+```text
+src/main/java/com.gym.management
+│
+├── config
+├── controller
+├── dto
+│   ├── request
+│   └── response
+├── entity
+├── exception
+├── mapper
+├── repository
+├── service
+│   ├── impl
+│   └── interfaces
+├── security      (اگر بعداً JWT اضافه کردیم)
+└── util
+```
+
 ```mermaid
 erDiagram
     USERS {
