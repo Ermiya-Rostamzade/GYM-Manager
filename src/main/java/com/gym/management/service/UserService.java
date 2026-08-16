@@ -6,6 +6,7 @@ import com.gym.management.dto.response.UserResponse;
 import com.gym.management.entity.User;
 import com.gym.management.mapper.UserMapper;
 import com.gym.management.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,10 +14,16 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(
+            UserRepository userRepository,
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponse registerUser(UserRegisterRequest request) {
@@ -25,6 +32,8 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.password()));
+
         User savedUser = userRepository.save(user);
 
         return userMapper.toResponse(savedUser);
@@ -38,7 +47,7 @@ public class UserService {
             throw new IllegalStateException("User is inactive");
         }
 
-        if (!user.getPassword().equals(request.password())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
