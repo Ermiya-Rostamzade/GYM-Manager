@@ -3,72 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Plan - Gym Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
 </head>
+
 <body>
 
-<h1>Create Plan</h1>
+<div class="container" style="max-width: 600px;">
 
-<form th:action="@{/admin/plans}" th:object="${plan}" method="post">
+    <div class="card">
 
-    <div>
-        <label for="title">Title:</label>
-        <input
-                type="text"
-                id="title"
-                th:field="*{title}"
-                required
-        >
+        <h1>Create Plan</h1>
+
+        <form th:action="@{/admin/plans}" th:object="${plan}" method="post">
+
+            <div class="form-group">
+                <label for="title">Title</label>
+
+                <input
+                        type="text"
+                        id="title"
+                        th:field="*{title}"
+                        required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+
+                <input
+                        type="number"
+                        id="price"
+                        th:field="*{price}"
+                        step="0.01"
+                        min="0"
+                        required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="durationDays">Duration (days)</label>
+
+                <input
+                        type="number"
+                        id="durationDays"
+                        th:field="*{durationDays}"
+                        min="1"
+                        required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="planType">Plan Type</label>
+
+                <select id="planType" th:field="*{planType}" required>
+                    <option value="" disabled>Select a plan type</option>
+
+                    <option
+                            th:each="type : ${T(com.gym.management.entity.enums.PlanType).values()}"
+                            th:value="${type}"
+                            th:text="${type}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button type="submit">
+                    Create Plan
+                </button>
+
+                <a
+                        class="button cancel"
+                        th:href="@{/admin/plans}">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
     </div>
 
-    <br>
+</div>
 
-    <div>
-        <label for="price">Price:</label>
-        <input
-                type="number"
-                id="price"
-                th:field="*{price}"
-                step="0.01"
-                min="0"
-                required
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="durationDays">Duration (days):</label>
-        <input
-                type="number"
-                id="durationDays"
-                th:field="*{durationDays}"
-                min="1"
-                required
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="planType">Plan Type:</label>
-        <select id="planType" th:field="*{planType}" required>
-            <option value="" disabled>Select a plan type</option>
-
-            <option
-                    th:each="type : ${T(com.gym.management.entity.enums.PlanType).values()}"
-                    th:value="${type}"
-                    th:text="${type}">
-            </option>
-        </select>
-    </div>
-
-    <br>
-
-    <button type="submit">Create Plan</button>
-    <a th:href="@{/admin/plans}">Cancel</a>
-
-</form>
+<script th:src="@{/js/plan.js}"></script>
 
 </body>
 </html>

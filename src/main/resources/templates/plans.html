@@ -3,41 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Plans - Gym Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
 </head>
+
 <body>
 
-<h1>Gym Plans</h1>
+<div class="container">
 
-<a th:href="@{/admin/plans/new}">Create New Plan</a>
+    <div class="header">
+        <h1>Gym Plans</h1>
 
-<hr>
+        <a class="button" th:href="@{/admin/plans/new}">
+            Create New Plan
+        </a>
+    </div>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Duration</th>
-        <th>Type</th>
-    </tr>
-    </thead>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Duration</th>
+                <th>Type</th>
+            </tr>
+            </thead>
 
-    <tbody>
-    <tr th:each="plan : ${plans}">
-        <td th:text="${plan.id}"></td>
-        <td th:text="${plan.title}"></td>
-        <td th:text="${plan.price}"></td>
-        <td th:text="${plan.durationDays} + ' days'"></td>
-        <td th:text="${plan.planType}"></td>
-    </tr>
+            <tbody>
+            <tr th:each="plan : ${plans}">
+                <td th:text="${plan.id}"></td>
+                <td th:text="${plan.title}"></td>
+                <td class="price" th:text="${plan.price}"></td>
+                <td th:text="${plan.durationDays} + ' days'"></td>
+                <td th:text="${plan.planType}"></td>
+            </tr>
 
-    <tr th:if="${#lists.isEmpty(plans)}">
-        <td colspan="5">No plans found.</td>
-    </tr>
-    </tbody>
-</table>
+            <tr th:if="${#lists.isEmpty(plans)}">
+                <td class="empty" colspan="5">
+                    No plans found.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script th:src="@{/js/plan.js}"></script>
 
 </body>
 </html>
