@@ -9,4 +9,5 @@ public record SubscriptionResponse(
         LocalDate endDate,
         Integer remainingSessions,
         String status
-) {}
+) {
+}
