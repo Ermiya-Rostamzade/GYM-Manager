@@ -8,7 +8,6 @@ public record PlanResponse(
         Long id,
         String title,
         BigDecimal price,
-        Integer sessions,
         Integer durationDays,
         PlanType planType
 ) {
