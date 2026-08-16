@@ -18,7 +18,7 @@ public class Payment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_id", nullable = false)
-    private UserSubscription subscription;
+    private UserSubscription userSubscription;
 
     @Column(nullable = false)
     private BigDecimal amount;
