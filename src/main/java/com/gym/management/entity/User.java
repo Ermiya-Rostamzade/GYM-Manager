@@ -30,7 +30,7 @@ public class User extends BaseEntity {
     private Role role;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RolePermission> permissions = new ArrayList<>();
