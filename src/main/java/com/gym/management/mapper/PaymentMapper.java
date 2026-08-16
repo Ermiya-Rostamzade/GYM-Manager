@@ -16,5 +16,4 @@ public interface PaymentMapper {
     //خود مپ استراکت میاد روی متد بالایی حلقه میزنه و داخل یک لیست تمام تاریخچه رو ذخیره می کنه میشد داخل لایه سرویس هم نوشت
     List<PaymentHistoryResponse> toHistoryResponseList(List<Payment> entities);
 
-
 }
