@@ -22,7 +22,7 @@ public class TrafficLog extends BaseEntity {
     @Column(name = "check_in_time", nullable = false)
     private LocalDateTime checkInTime;
 
-    @Column(name = "check_out_time", nullable = false)
+    @Column(name = "check_out_time")
     private LocalDateTime checkOutTime;
 
     @Enumerated(EnumType.STRING)
