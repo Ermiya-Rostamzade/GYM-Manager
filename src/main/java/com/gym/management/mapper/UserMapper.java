@@ -10,9 +10,13 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "isActive", ignore = true)
+    @Mapping(target = "permissions", ignore = true)
+    @Mapping(target = "notifications", ignore = true)
+    @Mapping(target = "subscriptions", ignore = true)
     User toEntity(UserRegisterRequest userRegisterRequest);
-
 
     UserResponse toResponse(User entity);
 }

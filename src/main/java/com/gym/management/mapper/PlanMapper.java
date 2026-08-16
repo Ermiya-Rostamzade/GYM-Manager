@@ -11,6 +11,8 @@ import org.mapstruct.Mapping;
 public interface PlanMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     Plan toEntity(PlanCreateRequest planCreateRequest);
 
     PlanResponse toResponse(Plan entity);
