@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
 
-    @Mapping(target = "subscriptionId", source = "subscription.id")
+    @Mapping(target = "userSubscriptionId", source = "userSubscription.id")
     PaymentHistoryResponse toHistoryResponse(Payment entity);
 
     //خود مپ استراکت میاد روی متد بالایی حلقه میزنه و داخل یک لیست تمام تاریخچه رو ذخیره می کنه میشد داخل لایه سرویس هم نوشت

@@ -11,6 +11,6 @@ public record PaymentHistoryResponse(
         String refCode,
         PaymentStatus status,
         LocalDateTime paidAt,
-        Long subscriptionId //شناسه اشتراکی که برای آن پرداخت انجام شده
+        Long userSubscriptionId //شناسه اشتراکی که برای آن پرداخت انجام شده
 ) {
 }
