@@ -17,8 +17,6 @@ public record PlanCreateRequest(
         @Min(value = 0, message = "amount cannot be negative")
         BigDecimal price,
 
-        Integer sessions,
-
         @NotNull(message = "The number of validity days is mandatory")
         @Min(value = 1, message = "The validity should be at least 30 days")
         Integer durationDays,
