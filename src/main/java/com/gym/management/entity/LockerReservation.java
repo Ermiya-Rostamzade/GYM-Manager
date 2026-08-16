@@ -22,18 +22,10 @@ public class LockerReservation extends BaseEntity {
     @JoinColumn(name = "locker_id", nullable = false)
     private Locker locker;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "traffic_log_id")
-//    private TrafficLog trafficLog; واقعا چرا باید ترافیک رو ربط بدیم؟
-
     @Column(name = "assigned_at", nullable = false)
     private LocalDateTime assignedAt;
 
     @Column(name = "released_at")
-    private LocalDateTime releasedAt; // اگر خالی باشد یعنی بسته، اگر زمان داشته باشد یعنی اکتیو. اینطوری مدیریتش ساده تره
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private LockerReservationStatus status; نیازی نیست
+    private LocalDateTime releasedAt;
 
 }

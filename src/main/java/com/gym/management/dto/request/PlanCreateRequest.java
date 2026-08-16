@@ -5,25 +5,25 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-
 import java.math.BigDecimal;
 
 //Defining a new exercise plan
-public record PlanCreateRequest (
+public record PlanCreateRequest(
 
-    @NotBlank(message = "plan title is required")
-    String title,
+        @NotBlank(message = "plan title is required")
+        String title,
 
-    @NotNull(message = "price title is required")
-    @Min(value = 0, message = "amount cannot be negative")
-    BigDecimal price,
+        @NotNull(message = "price title is required")
+        @Min(value = 0, message = "amount cannot be negative")
+        BigDecimal price,
 
-    Integer sessions,
+        Integer sessions,
 
-    @NotNull(message = "The number of validity days is mandatory")
-    @Min(value = 1, message = "The validity should be at least 30 days")
-    Integer durationDays,
+        @NotNull(message = "The number of validity days is mandatory")
+        @Min(value = 1, message = "The validity should be at least 30 days")
+        Integer durationDays,
 
-    @NotNull(message = "the type of plan should be defined")
-    PlanType planType
-){}
+        @NotNull(message = "the type of plan should be defined")
+        PlanType planType
+) {
+}
