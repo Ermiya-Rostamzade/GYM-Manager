@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -17,7 +19,7 @@ public class Plan extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private double price;
+    private BigDecimal price;
 
     @Column(name = "duration_days", nullable = false)
     private int durationDays;
