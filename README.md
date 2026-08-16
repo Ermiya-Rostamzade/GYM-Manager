@@ -1,6 +1,22 @@
 # Gym Management Application
 
-Project structure:
+[Required Services](#required-services) !!
+
+## How It Runs?
+
+Create a Postgresql database and `.env`, then run the following command:
+
+```powershell
+.\mvnw clean spring-boot:run
+```
+
+Go to:
+
+```http request
+http://localhost:8080/admin/plans
+```
+
+## Project Structure
 
 ```text
 src/main/java/com.gym.management
@@ -20,6 +36,8 @@ src/main/java/com.gym.management
 ├── security      (اگر بعداً JWT اضافه کردیم)
 └── util
 ```
+
+## Schemas
 
 ```mermaid
 erDiagram
@@ -106,5 +124,16 @@ erDiagram
     USERS ||--o{ LOCKER_RESERVATIONS : "reserves"
     LOCKERS ||--o{ LOCKER_RESERVATIONS : "assigned_to"
     TRAFFIC_LOGS ||--o| LOCKER_RESERVATIONS : "validates_presence"
-
 ```
+
+## Required Services
+
+1. UserService
+2. PlanService
+3. UserSubscriptionService
+4. PaymentService
+5. LockerService
+6. LockerReservationService
+7. TrafficLogService
+8. NotificationService
+9. RolePermissionService
