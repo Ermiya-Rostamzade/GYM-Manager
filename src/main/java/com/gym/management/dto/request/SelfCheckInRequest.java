@@ -5,4 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 public record SelfCheckInRequest(
         @NotBlank(message = "scan QR code")
         String qrCode
-) {}
+) {
+}
