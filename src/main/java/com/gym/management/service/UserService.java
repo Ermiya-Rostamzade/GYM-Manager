@@ -5,6 +5,7 @@ import com.gym.management.dto.request.UserProfileUpdateRequest;
 import com.gym.management.dto.request.UserRegisterRequest;
 import com.gym.management.dto.response.UserResponse;
 import com.gym.management.entity.User;
+import com.gym.management.entity.enums.Role;
 import com.gym.management.mapper.UserMapper;
 import com.gym.management.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -88,5 +89,17 @@ public class UserService {
         }
 
         return userMapper.toResponse(user);
+    }
+
+    public UserResponse registerSelf(UserRegisterRequest request) {
+        if (userRepository.existsByMobileNumber(request.mobileNumber())) {
+            throw new IllegalArgumentException("Mobile number is already registered.");
+        }
+
+        User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRole(Role.ATHLETE);
+        User savedUser = userRepository.save(user);
+        return userMapper.toResponse(savedUser);
     }
 }
