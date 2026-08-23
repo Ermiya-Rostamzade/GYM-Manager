@@ -34,7 +34,7 @@ public class UserSelfController {
             userService.registerSelf(userRegisterRequest);
             return "redirect:/login?registered";
         }catch (IllegalArgumentException ex){
-            bindingResult.rejectValue("mobileNumber", "error.user", ex.getMessage());
+            bindingResult.rejectValue("mobileNumber", null, ex.getMessage());
             return "register";
         }
     }
