@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByMobileNumber(String mobileNumber);
 
+    void deleteByMobileNumber(String mobileNumber);
+
 }
