@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New User</title>
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
+</head>
+<body>
+<div class="form-container">
+    <h2>Add New User</h2>
+    <form th:action="@{/admin/users}" th:object="${user}" method="post" id="userForm">
+
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" th:field="*{fullName}" placeholder="e.g. Alex Johnson" required />
+            <span class="error-msg" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="mobileNumber">Mobile Number</label>
+            <input type="text" id="mobileNumber" th:field="*{mobileNumber}" placeholder="09123456789" required />
+            <span class="error-msg" th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Enter secure password" required />
+            <span class="error-msg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="role">User Role</label>
+            <select id="role" th:field="*{role}" required>
+                <option value="" disabled selected>-- Select Role --</option>
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+            </select>
+            <span class="error-msg" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+        </div>
+
+        <div class="form-actions">
+            <a th:href="@{/admin/users}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save User</button>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
