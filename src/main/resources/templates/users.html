@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>User Management</h1>
+        <a th:href="@{/admin/users/new}" class="btn btn-primary">+ Add New User</a>
+    </header>
+
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Mobile Number</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, userStat: ${users}">
+                <td th:text="${userStat.count}">1</td>
+                <td th:text="${user.fullName}">John Doe</td>
+                <td th:text="${user.mobileNumber}">09123456789</td>
+                <td>
+                    <span class="badge" th:text="${user.role}">ADMIN</span>
+                </td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${user.isActive} ? 'badge-active' : 'badge-inactive'"
+                          th:text="${user.isActive} ? 'Active' : 'Inactive'">Active</span>
+                </td>
+                <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}">2026-08-23 10:00</td>
+                <td>
+                    <form th:action="@{/admin/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(users)}">
+                <td colspan="7" class="no-data">No users found.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
