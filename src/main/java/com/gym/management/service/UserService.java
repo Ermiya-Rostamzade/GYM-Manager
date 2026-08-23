@@ -9,6 +9,8 @@ import com.gym.management.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -24,6 +26,13 @@ public class UserService {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toResponse)
+                .toList();
     }
 
     public UserResponse registerUser(UserRegisterRequest request) {
