@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Registration</title>
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1>Create Account</h1>
+        </div>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" id="registerForm">
+
+            <!-- فیلد مخفی جهت جلب رضایت Validation کلاس DTO -->
+            <input type="hidden" th:field="*{role}" value="MEMBER" />
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" th:field="*{fullName}" placeholder="e.g. Alex Johnson" required />
+            </div>
+
+            <div class="form-group">
+                <label for="mobileNumber">Mobile Number</label>
+                <input type="text" id="mobileNumber" th:field="*{mobileNumber}" placeholder="09123456789" required />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}" placeholder="Enter password" required />
+            </div>
+
+            <div class="actions">
+                <button type="submit">Sign Up</button>
+                <a th:href="@{/login}" class="button cancel">Already have an account? Login</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/user.js}"></script>
+</body>
+</html>
