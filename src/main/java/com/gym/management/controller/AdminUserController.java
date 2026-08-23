@@ -2,7 +2,6 @@ package com.gym.management.controller;
 
 
 import com.gym.management.dto.request.UserRegisterRequest;
-import com.gym.management.dto.response.UserResponse;
 import com.gym.management.entity.enums.Role;
 import com.gym.management.service.UserService;
 import jakarta.validation.Valid;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
-public class UserController {
+public class AdminUserController {
 
     private final UserService userService;
 
