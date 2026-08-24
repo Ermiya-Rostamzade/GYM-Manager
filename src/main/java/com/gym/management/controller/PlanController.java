@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/plans")
@@ -42,4 +39,12 @@ public class PlanController {
         planService.createPlan(request);
         return "redirect:/admin/plans";
     }
+
+    @PostMapping("/delete/{id}")
+    public String deletePlan(@PathVariable long id) {
+    planService.deletePlan(id);
+    return "redirect:/admin/plans";
+    }
+
+
 }
