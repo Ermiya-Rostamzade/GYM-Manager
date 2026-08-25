@@ -24,6 +24,9 @@ public class Plan extends BaseEntity {
     @Column(name = "duration_days", nullable = false)
     private int durationDays;
 
+    @Column(name = "total_sessions")
+    private Integer totalSessions;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "plan_type", nullable = false)
     private PlanType planType;
