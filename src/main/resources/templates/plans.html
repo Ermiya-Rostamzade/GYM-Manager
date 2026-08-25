@@ -29,6 +29,7 @@
                 <th>Title</th>
                 <th>Price</th>
                 <th>Duration</th>
+                <th>Sessions</th>
                 <th>Type</th>
                 <th>Actions</th>
             </tr>
@@ -40,6 +41,7 @@
                 <td th:text="${plan.title}"></td>
                 <td class="price" th:text="${plan.price}"></td>
                 <td th:text="${plan.durationDays} + ' days'"></td>
+                <td th:text="${plan.totalSessions != null ? plan.totalSessions + ' sessions' : '-'}"></td>
                 <td th:text="${plan.planType}"></td>
                 <td>
                     <form th:action="@{/admin/plans/delete/{id}(id=${plan.id})}" method="post" style="display:inline;">
@@ -49,7 +51,7 @@
             </tr>
 
             <tr th:if="${#lists.isEmpty(plans)}">
-                <td class="empty" colspan="6">
+                <td class="empty" colspan="7">
                     No plans found.
                 </td>
             </tr>
