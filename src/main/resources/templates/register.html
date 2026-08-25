@@ -15,7 +15,7 @@
         <form th:action="@{/register}" th:object="${user}" method="post" id="registerForm">
 
             <!-- فیلد مخفی جهت جلب رضایت Validation کلاس DTO -->
-            <input type="hidden" th:field="*{role}" value="MEMBER" />
+            <input type="hidden" th:field="*{role}" value="ATHLETE" />
 
             <div class="form-group">
                 <label for="fullName">Full Name</label>
@@ -25,6 +25,10 @@
             <div class="form-group">
                 <label for="mobileNumber">Mobile Number</label>
                 <input type="text" id="mobileNumber" th:field="*{mobileNumber}" placeholder="09123456789" required />
+                <span th:if="${#fields.hasErrors('mobileNumber')}"
+                      th:errors="*{mobileNumber}"
+                      style="color: red; font-size: 0.85rem;">
+                </span>
             </div>
 
             <div class="form-group">
