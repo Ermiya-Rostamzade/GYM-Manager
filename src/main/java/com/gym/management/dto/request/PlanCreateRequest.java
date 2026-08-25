@@ -21,6 +21,9 @@ public record PlanCreateRequest(
         @Min(value = 1, message = "The validity should be at least 30 days")
         Integer durationDays,
 
+        @Min(value = 1, message = "Sessions count must be at least 1")
+        Integer totalSessions,//Optional for unlimited plans
+
         @NotNull(message = "the type of plan should be defined")
         PlanType planType
 ) {
