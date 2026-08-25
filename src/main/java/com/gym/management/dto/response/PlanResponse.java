@@ -9,6 +9,7 @@ public record PlanResponse(
         String title,
         BigDecimal price,
         Integer durationDays,
+        Integer totalSessions,
         PlanType planType
 ) {
 }
