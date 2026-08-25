@@ -1,93 +1,107 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Create Plan - Gym Management</title>
+        <title>Create Plan - Gym Management</title>
 
-    <link rel="stylesheet" th:href="@{/css/plan.css}">
-</head>
+        <link rel="stylesheet" th:href="@{/css/plan.css}">
+    </head>
 
-<body>
+    <body>
 
-<div class="container" style="max-width: 600px;">
+    <div class="container" style="max-width: 600px;">
 
-    <div class="card">
+        <div class="card">
 
-        <h1>Create Plan</h1>
+            <h1>Create Plan</h1>
 
-        <form th:action="@{/admin/plans}" th:object="${plan}" method="post">
+            <form th:action="@{/admin/plans}" th:object="${plan}" method="post">
 
-            <div class="form-group">
-                <label for="title">Title</label>
+                <div class="form-group">
+                    <label for="title">Title</label>
 
-                <input
-                        type="text"
-                        id="title"
-                        th:field="*{title}"
-                        required
-                >
-            </div>
+                    <input
+                            type="text"
+                            id="title"
+                            th:field="*{title}"
+                            required
+                    >
+                </div>
 
-            <div class="form-group">
-                <label for="price">Price</label>
+                <div class="form-group">
+                    <label for="price">Price</label>
 
-                <input
-                        type="number"
-                        id="price"
-                        th:field="*{price}"
-                        step="0.01"
-                        min="0"
-                        required
-                >
-            </div>
+                    <input
+                            type="number"
+                            id="price"
+                            th:field="*{price}"
+                            step="0.01"
+                            min="0"
+                            required
+                    >
+                </div>
 
-            <div class="form-group">
-                <label for="durationDays">Duration (days)</label>
+                <div class="form-group">
+                    <label for="durationDays">Duration (days)</label>
 
-                <input
-                        type="number"
-                        id="durationDays"
-                        th:field="*{durationDays}"
-                        min="1"
-                        required
-                >
-            </div>
+                    <input
+                            type="number"
+                            id="durationDays"
+                            th:field="*{durationDays}"
+                            min="1"
+                            required
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="totalSessions">Total Sessions</label>
+                    <input
+                            type="number"
+                            id="totalSessions"
+                            th:field="*{totalSessions}"
+                            placeholder="e.g. 12 (optional for time-based)"
+                            min="1"
+                    >
+                    <span th:if="${#fields.hasErrors('totalSessions')}"
+                          th:errors="*{totalSessions}"
+                          style="color: red; font-size: 0.85rem;">
+                    </span>
+                </div>
 
-            <div class="form-group">
-                <label for="planType">Plan Type</label>
+                <div class="form-group">
+                    <label for="planType">Plan Type</label>
 
-                <select id="planType" th:field="*{planType}" required>
-                    <option value="" disabled>Select a plan type</option>
+                    <select id="planType" th:field="*{planType}" required>
+                        <option value="" disabled>Select a plan type</option>
 
-                    <option
-                            th:each="type : ${T(com.gym.management.entity.enums.PlanType).values()}"
-                            th:value="${type}"
-                            th:text="${type}">
-                    </option>
-                </select>
-            </div>
+                        <option
+                                th:each="type : ${T(com.gym.management.entity.enums.PlanType).values()}"
+                                th:value="${type}"
+                                th:text="${type}">
+                        </option>
+                    </select>
+                </div>
 
-            <div class="actions">
-                <button type="submit">
-                    Create Plan
-                </button>
+                <div class="actions">
+                    <button type="submit">
+                        Create Plan
+                    </button>
 
-                <a
-                        class="button cancel"
-                        th:href="@{/admin/plans}">
-                    Cancel
-                </a>
-            </div>
+                    <a
+                            class="button cancel"
+                            th:href="@{/admin/plans}">
+                        Cancel
+                    </a>
+                </div>
 
-        </form>
+            </form>
+
+        </div>
 
     </div>
 
-</div>
+    <script th:src="@{/js/plan.js}"></script>
 
-<script th:src="@{/js/plan.js}"></script>
-
-</body>
-</html>
+    </body>
+    </html>
