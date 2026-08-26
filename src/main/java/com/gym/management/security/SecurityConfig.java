@@ -1,4 +1,4 @@
-package com.gym.management.config;
+package com.gym.management.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
