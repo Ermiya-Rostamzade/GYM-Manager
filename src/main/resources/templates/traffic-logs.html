@@ -36,8 +36,10 @@
             <tbody>
             <tr th:each="trafficLog, trafficLogStat : ${trafficLogs}">
                 <td th:text="${trafficLogStat.count}">1</td>
-                <td th:text="${trafficLog.checkInTime}"></td>
-                <td th:text="${trafficLog.checkOutTime != null ? trafficLog.checkOutTime : '-'}"></td>
+                <td th:text="${#temporals.format(trafficLog.checkInTime, 'yyyy MMM dd, HH:mm')}"></td>
+                <td th:text="${trafficLog.checkOutTime != null
+                        ? #temporals.format(trafficLog.checkOutTime, 'yyyy MMM dd, HH:mm')
+                        : '-'}"></td>
                 <td th:text="${trafficLog.entryMethod.name}"></td>
 
                 <td th:if="${trafficLog.checkOutTime == null}">
