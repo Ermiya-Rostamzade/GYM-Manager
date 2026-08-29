@@ -9,4 +9,6 @@ public interface TrafficLogRepository extends JpaRepository<TrafficLog, Long> {
 
     List<TrafficLog> findByUserId(Long userId);
 
+    List<TrafficLog> findAllByOrderByCheckInTimeDesc();
+
 }
