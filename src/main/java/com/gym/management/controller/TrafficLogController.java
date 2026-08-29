@@ -1,7 +1,6 @@
 package com.gym.management.controller;
 
 import com.gym.management.dto.request.TrafficLogUserRequest;
-import com.gym.management.entity.enums.TrafficLogMethod;
 import com.gym.management.service.TrafficLogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +24,16 @@ public class TrafficLogController {
     }
 
     @GetMapping("/check-in")
-    public String showCheckInQRCode(Model model) {
+    public String showCheckInForm(Model model) {
         model.addAttribute(
                 "trafficLogCheckIn",
-                new TrafficLogUserRequest(null, TrafficLogMethod.QR_CODE)
+                new TrafficLogUserRequest(null, null)
         );
         return "traffic-log-check-in";
     }
 
     @PostMapping("/check-in")
-    public String checkInByQRCode(
+    public String checkIn(
             @Valid @ModelAttribute("trafficLogCheckIn") TrafficLogUserRequest request
     ) {
         trafficLogService.createTrafficLog(request);
@@ -42,13 +41,13 @@ public class TrafficLogController {
     }
 
     @GetMapping("/check-out/{id}")
-    public String showCheckOutQRCode(@PathVariable Long id, Model model) {
+    public String showCheckOutForm(@PathVariable Long id, Model model) {
         model.addAttribute("trafficLogId", id);
         return "traffic-log-check-out";
     }
 
     @PostMapping("/check-out/{id}")
-    public String checkOutByQRCode(@PathVariable Long id) {
+    public String checkOut(@PathVariable Long id) {
         trafficLogService.setTrafficLogCheckOutTime(id);
         return "redirect:/traffic-log";
     }
