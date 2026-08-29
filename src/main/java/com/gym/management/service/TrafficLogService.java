@@ -40,7 +40,7 @@ public class TrafficLogService {
     }
 
     public List<TrafficLogResponse> getAllTrafficLogs() {
-        return trafficLogRepository.findAll()
+        return trafficLogRepository.findAllByOrderByCheckInTimeDesc()
                 .stream()
                 .map(trafficLogMapper::toResponse)
                 .toList();
