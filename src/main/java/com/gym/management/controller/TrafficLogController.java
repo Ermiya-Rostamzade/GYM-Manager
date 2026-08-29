@@ -18,7 +18,7 @@ public class TrafficLogController {
     @GetMapping
     public String trafficLogs(Model model) {
         model.addAttribute(
-                "trafficLogs", trafficLogService.getAllTrafficLogs(10)
+                "trafficLogs", trafficLogService.getAllTrafficLogs()
         );
         return "traffic-logs";
     }

@@ -46,14 +46,6 @@ public class TrafficLogService {
                 .toList();
     }
 
-    public List<TrafficLogResponse> getAllTrafficLogs(int length) {
-        return trafficLogRepository.findAll()
-                .stream()
-                .limit(length)
-                .map(trafficLogMapper::toResponse)
-                .toList();
-    }
-
     public TrafficLog getTrafficLogEntityById(Long id) {
         return trafficLogRepository.findById(id).orElse(null);
     }
