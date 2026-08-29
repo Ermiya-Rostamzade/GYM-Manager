@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Check Out - Gym Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container" style="max-width: 600px;">
+
+    <div class="card">
+
+        <h1>Traffic log - Check Out</h1>
+
+        <form th:action="@{/traffic-log/check-out/{id}(id=${trafficLogId})}"
+              method="post">
+
+            <div class="form-group">
+                <img src="#" alt="QR Code Image">
+            </div>
+
+            <div class="form-group">
+                <label for="submit">QR code backup button</label>
+
+                <input
+                        type="submit"
+                        id="submit"
+                        value="Check Out"
+                >
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
