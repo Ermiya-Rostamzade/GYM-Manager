@@ -49,6 +49,7 @@ public class TrafficLogService {
     public List<TrafficLogResponse> getAllTrafficLogs(int length) {
         return trafficLogRepository.findAll()
                 .stream()
+                .limit(length)
                 .map(trafficLogMapper::toResponse)
                 .toList();
     }
@@ -60,7 +61,8 @@ public class TrafficLogService {
     @Transactional
     public TrafficLogResponse updateTrafficLog(Long id, TrafficLogUserRequest request) {
         TrafficLog trafficLog = trafficLogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Traffic log not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Traffic log not found with id: " + id));
 
         trafficLog.setMethod(request.method());
 
@@ -70,7 +72,14 @@ public class TrafficLogService {
     @Transactional
     public void setTrafficLogCheckOutTime(Long id) {
         TrafficLog trafficLog = trafficLogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Traffic log not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Traffic log not found with id: " + id));
+
+        if (trafficLog.getCheckOutTime() != null) {
+            throw new IllegalStateException(
+                    "Traffic log has already been checked out: " + id
+            );
+        }
 
         trafficLog.setCheckOutTime(LocalDateTime.now());
     }
@@ -78,7 +87,8 @@ public class TrafficLogService {
     @Transactional
     public void deleteTrafficLog(Long id) {
         TrafficLog trafficLog = trafficLogRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Traffic log not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Traffic log not found with id: " + id));
 
         trafficLogRepository.delete(trafficLog);
     }
