@@ -31,6 +31,12 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserResponse getUserById(Long id) {
+        return userMapper.toResponse(
+                userRepository.findById(id).orElse(null)
+        );
+    }
+
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -39,15 +45,19 @@ public class UserService {
     }
 
     public UserResponse getUserByMobileNumber(String mobileNumber) {
-        User user = userRepository.findByMobileNumber(mobileNumber)
-                .orElseThrow(() -> new IllegalArgumentException("user not found with mobile-number: " + mobileNumber));
-        return userMapper.toResponse(user);
+        return userMapper.toResponse(
+                userRepository.findByMobileNumber(mobileNumber).orElse(null)
+        );
+    }
+
+    public User getUserEntityById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Transactional
-    public  UserResponse updateUserProfile(Long id, UserProfileUpdateRequest request){
+    public UserResponse updateUserProfile(Long id, UserProfileUpdateRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("user not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
 
         user.setFullName(request.fullName());
         User updatedUser = userRepository.save(user);
@@ -56,9 +66,9 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id){
-        if(!userRepository.existsById(id)){
-            throw new IllegalArgumentException("user not found with id: " + id);
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new IllegalArgumentException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
     }
@@ -102,4 +112,5 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return userMapper.toResponse(savedUser);
     }
+
 }
