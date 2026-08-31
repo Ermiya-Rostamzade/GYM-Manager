@@ -75,7 +75,7 @@ public class SubscriptionService {
 
         return subscriptionMapper.toResponse(userSubscriptionSaved);
     }
-    
+
     public List<SubscriptionResponse> getUserSubscriptions(Long userId) {
         return userSubscriptionRepository.findByUserId(userId)
                 .stream()
