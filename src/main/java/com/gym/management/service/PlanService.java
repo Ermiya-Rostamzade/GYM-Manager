@@ -34,8 +34,9 @@ public class PlanService {
     }
 
     public PlanResponse getPlanById(Long id) {
-        Plan plan = findPlanById(id);
-        return planMapper.toResponse(plan);
+        return planMapper.toResponse(
+                planRepository.findById(id).orElse(null)
+        );
     }
 
     public List<PlanResponse> getAllPlans() {
@@ -45,9 +46,14 @@ public class PlanService {
                 .toList();
     }
 
+    private Plan getPlanEntityById(Long id) {
+        return planRepository.findById(id).orElse(null);
+    }
+
     @Transactional
     public PlanResponse updatePlan(Long id, PlanCreateRequest request) {
-        Plan plan = findPlanById(id);
+        Plan plan = planRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Plan not found with id: " + id));
 
         if (!plan.getTitle().equals(request.title())
                 && planRepository.existsByTitle(request.title())) {
@@ -66,16 +72,9 @@ public class PlanService {
 
     @Transactional
     public void deletePlan(Long id) {
-        Plan plan = findPlanById(id);
+        Plan plan = planRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Plan not found with id: " + id));
         planRepository.delete(plan);
     }
 
-    private Plan findPlanById(Long id) {
-        return planRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Plan not found with id: " + id
-                        )
-                );
-    }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Traffic logs - Gym Management</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>User Traffic logs</h1>
+
+        <a class="button" th:href="@{/traffic-log/check-in}">
+            Check In
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Check In Time</th>
+                <th>Check Out Time</th>
+                <th>Method</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="trafficLog, trafficLogStat : ${trafficLogs}">
+                <td th:text="${trafficLogStat.count}">1</td>
+                <td th:text="${#temporals.format(trafficLog.checkInTime, 'yyyy MMM dd, HH:mm')}"></td>
+                <td th:text="${trafficLog.checkOutTime != null
+                        ? #temporals.format(trafficLog.checkOutTime, 'yyyy MMM dd, HH:mm')
+                        : '-'}"></td>
+                <td th:text="${trafficLog.entryMethod.name}"></td>
+
+                <td th:if="${trafficLog.checkOutTime == null}">
+                    <a class="button"
+                       th:href="@{/traffic-log/check-out/{id}(id=${trafficLog.id})}">
+                        Check Out
+                    </a>
+                </td>
+
+                <td th:unless="${trafficLog.checkOutTime == null}">
+                    Done
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(trafficLogs)}">
+                <td class="empty" colspan="5">
+                    No Traffic logs found.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
