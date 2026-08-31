@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Subscriptions</title>
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>Welcome <span th:text="${user.fullName}"></span></h1>
+            <p style="color: #6b7280; margin-top: 4px;">Mobile: <span th:text="${user.mobileNumber}"></span></p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a th:href="@{/subscriptions/buy}" class="button">+ Buy New Plan</a>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="button cancel">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${param.success}" style="color: #16a34a; font-weight: bold; margin-bottom: 20px;">
+        🎉 Subscription purchased and activated successfully!
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Plan Title</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th style="text-align: center;">Remaining Sessions</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sub, stat : ${subscriptions}">
+                <td th:text="${stat.count}">1</td>
+                <td th:text="${sub.plan.title}">Monthly Gym</td>
+                <td th:text="${sub.startDate}">2026-08-01</td>
+                <td th:text="${sub.endDate}">2026-08-31</td>
+                <td style="text-align: center;" th:text="${sub.remainingSessions != null ? sub.remainingSessions : 'Unlimited'}">12</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${sub.status == 'ACTIVE'} ? 'badge-active' : 'badge-inactive'"
+                          th:text="${sub.status}">ACTIVE</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(subscriptions)}">
+                <td colspan="6" class="empty">You have no subscriptions yet. Click "Buy New Plan" to get started!</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
