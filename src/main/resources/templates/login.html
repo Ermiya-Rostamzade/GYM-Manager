@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Gym Management</title>
+    <link rel="stylesheet" th:href="@{/css/plan.css}">
+</head>
+<body>
+<div class="container" style="max-width: 450px;">
+    <div class="card">
+        <div class="header">
+            <h1>Login to Gym</h1>
+        </div>
+
+        <div th:if="${param.error}" style="color: #dc2626; margin-bottom: 15px; font-size: 14px;">
+            Invalid mobile number or password.
+        </div>
+        <div th:if="${param.logout}" style="color: #16a34a; margin-bottom: 15px; font-size: 14px;">
+            You have been logged out successfully.
+        </div>
+        <div th:if="${param.registered}" style="color: #16a34a; margin-bottom: 15px; font-size: 14px;">
+            Registration successful! Please login.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="mobileNumber">Mobile Number</label>
+                <input type="text" id="mobileNumber" name="mobileNumber" placeholder="09123456789" required autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required />
+            </div>
+
+            <div class="actions" style="flex-direction: column; gap: 12px;">
+                <button type="submit" style="width: 100%;">Sign In</button>
+                <a th:href="@{/register}" class="button cancel" style="text-align: center;">Don't have an account? Sign Up</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
