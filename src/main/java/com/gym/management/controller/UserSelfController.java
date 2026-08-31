@@ -14,18 +14,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/register")
 @RequiredArgsConstructor
 public class UserSelfController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/login")
+    public String showLoginForm(Model model){
+        return "login";
+    }
+
+    @GetMapping("/register")
     public String ShowRegisterForm(Model model) {
         model.addAttribute("user", new UserRegisterRequest(null,null,null, Role.ATHLETE));
         return "register";
     }
-    @PostMapping
+    @PostMapping("/register")
     public String RegisterUser(@Valid @ModelAttribute("user") UserRegisterRequest userRegisterRequest , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "register";
