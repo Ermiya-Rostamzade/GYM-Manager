@@ -3,59 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Check In - Gym Management</title>
-
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
-
 <div class="container" style="max-width: 600px;">
-
     <div class="card">
+        <h1>Traffic Log - Check In</h1>
 
-        <h1>Traffic log - Check In</h1>
 
-        <form th:action="@{/traffic-log/check-in}"
-              th:object="${trafficLogCheckIn}"
-              method="post">
+        <div th:if="${errorMessage}" style="color: #dc2626; margin-bottom: 15px; font-weight: bold;">
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-            <div class="form-group">
-                <label for="method">Select method</label>
+        <form th:action="@{/traffic-log/check-in}" th:object="${trafficLogCheckIn}" method="post">
 
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="method">Select Method</label>
                 <select id="method" th:field="*{method}">
-                    <option value="QR_CODE" selected>QR Code</option>
+                    <option value="QR_CODE">QR Code</option>
                     <option value="RFID">RFID</option>
                     <option value="FINGERPRINT">Fingerprint</option>
                 </select>
+                <div th:if="${#fields.hasErrors('method')}" th:errors="*{method}" style="color: #dc2626; font-size: 0.9em; margin-top: 5px;"></div>
             </div>
 
-            <div class="form-group">
-                <img src="#" alt="QR Code Image">
+            <div class="actions" style="margin-top: 20px;">
+                <button type="submit" class="button">Submit Check In</button>
+                <a th:href="@{/traffic-log}" class="button cancel">Back to Logs</a>
             </div>
-
-            <div class="form-group">
-                <label for="submit">QR code backup button</label>
-
-                <input
-                        type="submit"
-                        id="submit"
-                        value="Check In"
-                >
-
-                <input
-                        type="hidden"
-                        name="userId"
-                        value="1"
-                > <!-- Hard-coded user ID -->
-            </div>
-
         </form>
-
     </div>
-
 </div>
-
 </body>
 </html>

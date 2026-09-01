@@ -40,18 +40,21 @@
                 <td th:text="${trafficLog.checkOutTime != null
                         ? #temporals.format(trafficLog.checkOutTime, 'yyyy MMM dd, HH:mm')
                         : '-'}"></td>
-                <td th:text="${trafficLog.entryMethod.name}"></td>
+                <td th:text="${trafficLog.entryMethod}"></td>
 
                 <td th:if="${trafficLog.checkOutTime == null}">
-                    <a class="button"
-                       th:href="@{/traffic-log/check-out/{id}(id=${trafficLog.id})}">
-                        Check Out
-                    </a>
+                    <form th:action="@{/traffic-log/check-out/{id}(id=${trafficLog.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="button" style="background: #dc2626; padding: 6px 12px;" onclick="return confirm('Do you want to check out?');">
+                            Check Out
+                        </button>
+                    </form>
                 </td>
 
                 <td th:unless="${trafficLog.checkOutTime == null}">
                     Done
                 </td>
+
+
             </tr>
 
             <tr th:if="${#lists.isEmpty(trafficLogs)}">
