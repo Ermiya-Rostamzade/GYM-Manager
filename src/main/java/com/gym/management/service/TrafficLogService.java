@@ -4,6 +4,7 @@ import com.gym.management.dto.request.TrafficLogUserRequest;
 import com.gym.management.dto.response.TrafficLogResponse;
 import com.gym.management.entity.TrafficLog;
 import com.gym.management.entity.User;
+import com.gym.management.entity.UserSubscription;
 import com.gym.management.mapper.TrafficLogMapper;
 import com.gym.management.repository.TrafficLogRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,31 @@ public class TrafficLogService {
     private final UserService userService;
     private final TrafficLogRepository trafficLogRepository;
     private final TrafficLogMapper trafficLogMapper;
+    private final SubscriptionService subscriptionService;
 
-    public TrafficLogResponse createTrafficLog(TrafficLogUserRequest request) {
-        User user = userService.getUserEntityById(request.userId());
+
+    public TrafficLogResponse createTrafficLog(Long userId,TrafficLogUserRequest request) {
+        User user = userService.getUserEntityById(userId);
+
+        //Check for overlapping active gym sessions (check-in without check-out)
+        trafficLogRepository.findFirstByUserIdAndCheckOutTimeIsNull(user.getId())
+                .ifPresent(activeLog -> {
+                    throw new IllegalStateException("User does not have an active and valid subscription");
+                });
+        UserSubscription activeSubscription = subscriptionService.getActiveUserSubscription(user.getId());
+        if(activeSubscription == null) {
+            throw new IllegalStateException("User does not have an active subscription");
+        }
+        //کسر جلسه در صورت محدود بودن پلن
+        if(activeSubscription.getRemainingSessions() != null){
+            if(activeSubscription.getRemainingSessions() <= 0){
+                throw new IllegalStateException("The allowed number of subscription sessions has been exhausted.");
+            }
+            activeSubscription.setRemainingSessions(activeSubscription.getRemainingSessions() - 1);
+        }
+
+
+
 
         TrafficLog trafficLog = new TrafficLog();
         trafficLog.setUser(user);
