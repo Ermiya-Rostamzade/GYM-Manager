@@ -48,6 +48,9 @@ public class SubscriptionService {
                     boolean hasSessions = sub.getRemainingSessions() == null || sub.getRemainingSessions() > 0;
                     if (isDateValid && hasSessions) {
                         throw new IllegalArgumentException("The user currently has an active subscription.");
+                    }else{
+                        sub.setStatus(SubscriptionStatus.EXPIRED);
+                        userSubscriptionRepository.save(sub);
                     }
                 });
         LocalDate startDate = LocalDate.now();
@@ -95,7 +98,7 @@ public class SubscriptionService {
         boolean isDateExpired = activeSub.getEndDate().isBefore(LocalDate.now());
         boolean isSessionsFinished = activeSub.getRemainingSessions() != null && activeSub.getRemainingSessions() <= 0;
 
-        if (isDateExpired && isSessionsFinished) {
+        if (isDateExpired || isSessionsFinished) {
             activeSub.setStatus(SubscriptionStatus.EXPIRED);
             userSubscriptionRepository.save(activeSub);
             return null;
