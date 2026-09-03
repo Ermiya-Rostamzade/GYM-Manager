@@ -31,14 +31,13 @@ public class LockerService {
 
     public List<Locker> getAllLockerBySection(GenderSection genderSection) {
         return lockerRepository.findByGenderSection(genderSection);
-
     }
 
     public LockerReservation getActiveReservationForUser(long userId) {
         return lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId).orElse(null);
     }
 
-    //Reserving a preferred locker by the user
+    // Reserving a preferred locker by the user
     @Transactional
     public LockerReservation reserveLocker(long userId, long lockerId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -62,10 +61,9 @@ public class LockerService {
         lockerReservation.setAssignedAt(LocalDateTime.now());
 
         return lockerReservationRepository.save(lockerReservation);
-
     }
 
-    //Release locker
+    // Release locker
     @Transactional
     public void releaseLocker(Long userId) {
         LockerReservation reservation = lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId)
@@ -92,7 +90,6 @@ public class LockerService {
             locker.setHardwareIp(null); // حتماً null ست شود نه رشته خالی ""
         }
         return lockerRepository.save(locker);
-
     }
 
 }
