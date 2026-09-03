@@ -29,7 +29,8 @@ public class UserSubscription extends BaseEntity {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "remaining_sessions", nullable = false)
+    // A null value represents an unlimited, time-based plan.
+    @Column(name = "remaining_sessions")
     private Integer remainingSessions;
 
     @Enumerated(EnumType.STRING)
