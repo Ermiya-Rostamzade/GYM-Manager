@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Choose a Membership Plan</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
+
 <body>
-<div class="container">
-    <div class="header">
-        <h1>Select a Plan</h1>
-        <a th:href="@{/subscriptions/my-subscriptions}" class="button cancel">My Dashboard</a>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Select a Plan</h1>
+            <a th:href="@{/subscriptions/my-subscriptions}" class="button cancel">My Dashboard</a>
+        </div>
 
-    <div th:if="${param.error}" style="color: #dc2626; margin-bottom: 20px;">
-        <span th:text="${param.error}"></span>
-    </div>
+        <div th:if="${errorMessage}" style="color: #dc2626; margin-bottom: 20px;">
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        <div th:each="plan : ${plans}" class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <h2 th:text="${plan.title}">Gold Plan</h2>
-                <p style="font-size: 24px; font-weight: bold; color: #2563eb; margin: 15px 0;">
-                    <span class="price" th:text="${plan.price}"></span> Tomans
-                </p>
-                <ul style="list-style: none; padding: 0; line-height: 2;">
-                    <li>⏳ Duration: <strong th:text="${plan.durationDays} + ' days'"></strong></li>
-                    <li>🏋️ Sessions:
-                        <strong th:text="${plan.totalSessions != null ? plan.totalSessions + ' sessions' : 'Unlimited'}"></strong>
-                    </li>
-                    <li>🏷️ Type: <span th:text="${plan.planType}"></span></li>
-                </ul>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div th:each="plan : ${plans}" class="card"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h2 th:text="${plan.title}">Gold Plan</h2>
+                    <p style="font-size: 24px; font-weight: bold; color: #2563eb; margin: 15px 0;">
+                        <span class="price" th:text="${plan.price}"></span> Tomans
+                    </p>
+                    <ul style="list-style: none; padding: 0; line-height: 2;">
+                        <li>⏳ Duration: <strong th:text="${plan.durationDays} + ' days'"></strong></li>
+                        <li>🏋️ Sessions:
+                            <strong
+                                th:text="${plan.totalSessions != null ? plan.totalSessions + ' sessions' : 'Unlimited'}"></strong>
+                        </li>
+                        <li>🏷️ Type: <span th:text="${plan.planType}"></span></li>
+                    </ul>
+                </div>
+
+                <form th:action="@{/subscriptions/purchase}" method="post" style="margin-top: 20px;">
+                    <input type="hidden" name="planId" th:value="${plan.id}" />
+                    <button type="submit" style="width: 100%; background: #16a34a;">Pay & Activate Now</button>
+                </form>
             </div>
-
-            <form th:action="@{/subscriptions/purchase}" method="post" style="margin-top: 20px;">
-                <input type="hidden" name="planId" th:value="${plan.id}" />
-                <button type="submit" style="width: 100%; background: #16a34a;">Pay & Activate Now</button>
-            </form>
         </div>
     </div>
-</div>
 
-<script th:src="@{/js/plan.js}"></script>
+    <script th:src="@{/js/plan.js}"></script>
 </body>
+
 </html>
