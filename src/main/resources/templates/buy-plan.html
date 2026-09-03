@@ -11,7 +11,7 @@
     <div class="container">
         <div class="header">
             <h1>Select a Plan</h1>
-            <a th:href="@{/subscriptions/my-subscriptions}" class="button cancel">My Dashboard</a>
+            <a th:href="@{/dashboard}" class="button cancel">My Dashboard</a>
         </div>
 
         <div th:if="${errorMessage}" style="color: #dc2626; margin-bottom: 20px;">
@@ -36,7 +36,7 @@
                     </ul>
                 </div>
 
-                <form th:action="@{/subscriptions/purchase}" method="post" style="margin-top: 20px;">
+                <form th:action="@{/dashboard/purchase}" method="post" style="margin-top: 20px;">
                     <input type="hidden" name="planId" th:value="${plan.id}" />
                     <button type="submit" style="width: 100%; background: #16a34a;">Pay & Activate Now</button>
                 </form>

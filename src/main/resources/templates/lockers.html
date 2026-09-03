@@ -397,7 +397,7 @@
             <a th:href="@{/admin/lockers/new}" class="btn-admin">
                 + Add New Locker
             </a>
-            <a th:href="@{/subscriptions/my-subscriptions}" class="btn-back">
+            <a th:href="@{/dashboard}" class="btn-back">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -436,7 +436,7 @@
                 <strong th:text="${activeReservation.locker.lockerNumber}">M-101</strong>
             </div>
         </div>
-        <form th:action="@{/lockers/release}" method="post" style="margin: 0;">
+        <form th:action="@{/dashboard/lockers/release}" method="post" style="margin: 0;">
             <input type="hidden" name="section" th:value="${currentSection}">
             <button type="submit" class="btn-release">Release Locker</button>
         </form>
@@ -444,12 +444,12 @@
 
     <div class="controls-row">
         <div class="section-tabs">
-            <a th:href="@{/lockers?section=MEN}"
+            <a th:href="@{/dashboard/lockers?section=MEN}"
                class="section-btn"
                th:classappend="${currentSection.name() == 'MEN'} ? 'active' : ''">
                 Men's Area
             </a>
-            <a th:href="@{/lockers?section=WOMEN}"
+            <a th:href="@{/dashboard/lockers?section=WOMEN}"
                class="section-btn"
                th:classappend="${currentSection.name() == 'WOMEN'} ? 'active' : ''">
                 Women's Area
@@ -473,7 +473,7 @@
         <div th:each="locker : ${lockers}">
 
             <form th:if="${locker.status.name() == 'EMPTY' && activeReservation == null}"
-                  th:action="@{/lockers/reserve}"
+                  th:action="@{/dashboard/lockers/reserve}"
                   method="post"
                   style="margin: 0;">
                 <input type="hidden" name="lockerId" th:value="${locker.id}">

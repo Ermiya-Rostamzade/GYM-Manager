@@ -15,10 +15,10 @@
         <div style="display: flex; gap: 10px;">
 
 
-            <a th:href="@{/lockers}" class="button" style="background-color: #059669; margin-left: 10px;">
+            <a th:href="@{/dashboard/lockers}" class="button" style="background-color: #059669; margin-left: 10px;">
                 🔑 View & Reserve Locker
             </a>
-            <a th:href="@{/subscriptions/buy}" class="button">+ Buy New Plan</a>
+            <a th:href="@{/dashboard/buy}" class="button">+ Buy New Plan</a>
             <form th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="button cancel">Logout</button>
             </form>

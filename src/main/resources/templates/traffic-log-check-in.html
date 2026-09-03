@@ -16,7 +16,7 @@
             <span th:text="${errorMessage}"></span>
         </div>
 
-        <form th:action="@{/traffic-log/check-in}" th:object="${trafficLogCheckIn}" method="post">
+        <form th:action="@{/dashboard/traffic-log/check-in}" th:object="${trafficLogCheckIn}" method="post">
 
 
             <div class="form-group" style="margin-bottom: 15px;">
@@ -31,7 +31,7 @@
 
             <div class="actions" style="margin-top: 20px;">
                 <button type="submit" class="button">Submit Check In</button>
-                <a th:href="@{/traffic-log}" class="button cancel">Back to Logs</a>
+                <a th:href="@{/dashboard/traffic-log}" class="button cancel">Back to Logs</a>
             </div>
         </form>
     </div>
