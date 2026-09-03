@@ -3,7 +3,6 @@ package com.gym.management.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,8 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/register", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
@@ -33,14 +31,12 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .defaultSuccessUrl("/subscriptions/my-subscriptions", true)
                         .failureUrl("/login?error")
-                        .permitAll()
-                )
+                        .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
+                        .permitAll())
                 .build();
-
     }
+
 }

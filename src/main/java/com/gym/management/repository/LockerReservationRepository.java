@@ -1,7 +1,6 @@
 package com.gym.management.repository;
 
 import com.gym.management.entity.LockerReservation;
-import com.gym.management.entity.enums.LockerStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

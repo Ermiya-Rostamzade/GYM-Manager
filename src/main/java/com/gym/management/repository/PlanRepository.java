@@ -10,4 +10,5 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     Optional<Plan> findByTitle(String title);
 
     boolean existsByTitle(String title);
+
 }
