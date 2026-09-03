@@ -24,13 +24,11 @@ public class LockerController {
     private final LockerService lockerService;
     private final UserService userService;
 
-
     @GetMapping
     public String showLockerGrid(
             @RequestParam(name = "section", defaultValue = "MEN") GenderSection section,
             Principal principal,
-            Model model
-    ) {
+            Model model) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         LockerReservation activeReservation = lockerService.getActiveReservationForUser(user.id());
 
@@ -40,14 +38,12 @@ public class LockerController {
         return "lockers";
     }
 
-
     @PostMapping("/reserve")
     public String reserveLocker(
             @RequestParam("lockerId") Long lockerId,
             @RequestParam("section") GenderSection section,
             Principal principal,
-            RedirectAttributes redirectAttributes
-    ) {
+            RedirectAttributes redirectAttributes) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         try {
             lockerService.reserveLocker(user.id(), lockerId);
@@ -58,13 +54,11 @@ public class LockerController {
         return "redirect:/lockers?section=" + section;
     }
 
-
     @PostMapping("/release")
     public String releaseLocker(
             @RequestParam("section") GenderSection section,
             Principal principal,
-            RedirectAttributes redirectAttributes
-    ) {
+            RedirectAttributes redirectAttributes) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         try {
             lockerService.releaseLocker(user.id());
@@ -74,4 +68,5 @@ public class LockerController {
         }
         return "redirect:/lockers?section=" + section;
     }
+
 }

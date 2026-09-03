@@ -5,7 +5,6 @@ import com.gym.management.entity.enums.GenderSection;
 import com.gym.management.service.LockerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,8 +33,7 @@ public class AdminLockerController {
             @Valid @ModelAttribute("lockerRequest") LockerCreateRequest request,
             BindingResult bindingResult,
             Model model,
-            RedirectAttributes redirectAttributes
-    ) {
+            RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("sections", GenderSection.values());
             return "admin/locker-create";
@@ -51,4 +49,5 @@ public class AdminLockerController {
             return "admin/locker-create";
         }
     }
+
 }
