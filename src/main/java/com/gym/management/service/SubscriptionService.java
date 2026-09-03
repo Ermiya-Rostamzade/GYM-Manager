@@ -1,6 +1,5 @@
 package com.gym.management.service;
 
-
 import com.gym.management.dto.request.BuySubscriptionRequest;
 import com.gym.management.dto.response.SubscriptionResponse;
 import com.gym.management.entity.Payment;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SubscriptionService {
 
@@ -41,20 +40,21 @@ public class SubscriptionService {
         Plan plan = planRepository.findById(request.planId())
                 .orElseThrow(() -> new IllegalArgumentException("Plan not found with id: " + request.planId()));
 
-        //We check the user has an expired active subscription or not ?
+        // We check the user has an expired active subscription or not ?
         userSubscriptionRepository.findByUserIdAndStatus(userId, SubscriptionStatus.ACTIVE)
                 .ifPresent(sub -> {
                     boolean isDateValid = !sub.getEndDate().isBefore(LocalDate.now());
                     boolean hasSessions = sub.getRemainingSessions() == null || sub.getRemainingSessions() > 0;
                     if (isDateValid && hasSessions) {
                         throw new IllegalArgumentException("The user currently has an active subscription.");
-                    }else{
+                    } else {
                         sub.setStatus(SubscriptionStatus.EXPIRED);
                         userSubscriptionRepository.save(sub);
                     }
                 });
         LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(plan.getDurationDays());
+        // End dates are inclusive, so a one-day plan is valid on its start date only.
+        LocalDate endDate = startDate.plusDays(plan.getDurationDays() - 1L);
 
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setUser(user);
@@ -66,7 +66,7 @@ public class SubscriptionService {
 
         UserSubscription userSubscriptionSaved = userSubscriptionRepository.save(userSubscription);
 
-        //save payment record.
+        // save payment record.
         Payment payment = new Payment();
         payment.setUserSubscription(userSubscriptionSaved);
         payment.setAmount(plan.getPrice());
@@ -86,7 +86,8 @@ public class SubscriptionService {
                 .toList();
     }
 
-    //Checking the user's current active subscription with automatic expiration the end of the term or sessions.
+    // Checking the user's current active subscription with automatic expiration the
+    // end of the term or sessions.
     @Transactional
     public UserSubscription getActiveUserSubscription(Long userId) {
 
@@ -104,8 +105,6 @@ public class SubscriptionService {
             return null;
         }
         return activeSub;
-
-
-
     }
+
 }
