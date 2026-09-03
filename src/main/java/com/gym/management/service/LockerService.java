@@ -1,8 +1,11 @@
 package com.gym.management.service;
 
+import com.gym.management.dto.request.LockerCreateRequest;
 import com.gym.management.entity.Locker;
 import com.gym.management.entity.LockerReservation;
+import com.gym.management.entity.User;
 import com.gym.management.entity.enums.GenderSection;
+import com.gym.management.entity.enums.LockerStatus;
 import com.gym.management.repository.LockerRepository;
 import com.gym.management.repository.LockerReservationRepository;
 import com.gym.management.repository.UserRepository;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,12 +25,74 @@ public class LockerService {
     private final LockerReservationRepository lockerReservationRepository;
     private final UserRepository userRepository;
 
-    public List<Locker> getAllLockers(){
+    public List<Locker> getAllLockers() {
         return lockerRepository.findAll();
     }
 
-    public List<Locker> getAllLockerBySection(GenderSection genderSection){
+    public List<Locker> getAllLockerBySection(GenderSection genderSection) {
         return lockerRepository.findByGenderSection(genderSection);
 
     }
+
+    public LockerReservation getActiveReservationForUser(long userId) {
+        return lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId).orElse(null);
+    }
+
+    //Reserving a preferred locker by the user
+    @Transactional
+    public LockerReservation reserveLocker(long userId, long lockerId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId).isPresent()) {
+            throw new IllegalStateException("User is already reserved");
+        }
+
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new IllegalArgumentException("Locker not found"));
+        if (locker.getStatus() != LockerStatus.EMPTY) {
+            throw new IllegalStateException("locker is not available");
+        }
+
+        locker.setStatus(LockerStatus.OCCUPIED);
+        lockerRepository.save(locker);
+
+        LockerReservation lockerReservation = new LockerReservation();
+        lockerReservation.setUser(user);
+        lockerReservation.setLocker(locker);
+        lockerReservation.setAssignedAt(LocalDateTime.now());
+
+        return lockerReservationRepository.save(lockerReservation);
+
+    }
+
+    //Release locker
+    @Transactional
+    public void releaseLocker(Long userId) {
+        LockerReservation reservation = lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId)
+                .orElseThrow(() -> new IllegalStateException("هیچ کمد فعالی برای آزادسازی یافت نشد."));
+
+        reservation.setReleasedAt(LocalDateTime.now());
+        lockerReservationRepository.save(reservation);
+
+        Locker locker = reservation.getLocker();
+        locker.setStatus(LockerStatus.EMPTY);
+        lockerRepository.save(locker);
+    }
+
+    @Transactional
+    public Locker createLocker(LockerCreateRequest request) {
+        Locker locker = new Locker();
+        locker.setLockerNumber(request.lockerNumber());
+        locker.setGenderSection(request.genderSection());
+        locker.setStatus(LockerStatus.EMPTY);
+        locker.setHardwareIp(request.hardwareIp());
+        if (request.hardwareIp() != null && !request.hardwareIp().trim().isEmpty()) {
+            locker.setHardwareIp(request.hardwareIp().trim());
+        } else {
+            locker.setHardwareIp(null); // حتماً null ست شود نه رشته خالی ""
+        }
+        return lockerRepository.save(locker);
+
+    }
+
 }

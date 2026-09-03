@@ -1,4 +1,4 @@
-package com.gym.management.config;
+package com.gym.management.security;
 
 import com.gym.management.entity.User;
 import com.gym.management.entity.enums.Role;
@@ -29,7 +29,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setIsActive(true);
 
             userRepository.save(admin);
-            System.out.println(">>> Default Admin Created: Mobile=09000000000 | Password=admin123");
+                System.out.println(">>> Default Admin Created: Mobile=09000000000 | Password=admin123");
         }
     }
 }
