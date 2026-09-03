@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TrafficLogRepository extends JpaRepository<TrafficLog, Long> {
 
-    List<TrafficLog> findByUserId(Long userId);
+    List<TrafficLog> findByUserIdOrderByCheckInTimeDesc(Long userId);
 
     List<TrafficLog> findAllByOrderByCheckInTimeDesc();
 

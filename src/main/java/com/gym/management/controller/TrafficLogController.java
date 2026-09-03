@@ -1,7 +1,6 @@
 package com.gym.management.controller;
 
 import com.gym.management.dto.request.TrafficLogUserRequest;
-import com.gym.management.dto.response.TrafficLogResponse;
 import com.gym.management.dto.response.UserResponse;
 import com.gym.management.service.TrafficLogService;
 import com.gym.management.service.UserService;
@@ -20,13 +19,12 @@ import java.security.Principal;
 public class TrafficLogController {
 
     private final TrafficLogService trafficLogService;
-    private  final UserService userService;
+    private final UserService userService;
 
     @GetMapping
-    public String trafficLogs(Model model) {
-        model.addAttribute(
-                "trafficLogs", trafficLogService.getAllTrafficLogs()
-        );
+    public String trafficLogs(Principal principal, Model model) {
+        UserResponse user = userService.getUserByMobileNumber(principal.getName());
+        model.addAttribute("trafficLogs", trafficLogService.getTrafficLogsForUser(user.id()));
         return "traffic-logs";
     }
 
@@ -34,8 +32,7 @@ public class TrafficLogController {
     public String showCheckInForm(Model model) {
         model.addAttribute(
                 "trafficLogCheckIn",
-                new TrafficLogUserRequest(null)
-        );
+                new TrafficLogUserRequest(null));
         return "traffic-log-check-in";
     }
 
@@ -44,24 +41,18 @@ public class TrafficLogController {
             @Valid @ModelAttribute("trafficLogCheckIn") TrafficLogUserRequest request,
             BindingResult bindingResult,
             Principal principal,
-            Model model
-    ) {
+            Model model) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
-        TrafficLogUserRequest userRequest = new TrafficLogUserRequest(request.method());
-
         if (bindingResult.hasErrors()) {
             return "traffic-log-check-in";
         }
-        try{
-
-            trafficLogService.createTrafficLog(user.id(),request);
+        try {
+            trafficLogService.createTrafficLog(user.id(), request);
             return "redirect:/traffic-log";
-        }catch (IllegalArgumentException | IllegalStateException ex){
-            model.addAttribute("error", ex.getMessage());
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
             return "traffic-log-check-in";
         }
-
-
     }
 
     @GetMapping("/check-out/{id}")
@@ -71,9 +62,10 @@ public class TrafficLogController {
     }
 
     @PostMapping("/check-out/{id}")
-    public String checkOut(@PathVariable Long id,Model model) {
+    public String checkOut(@PathVariable Long id, Principal principal, Model model) {
         try {
-            trafficLogService.setTrafficLogCheckOutTime(id);
+            UserResponse user = userService.getUserByMobileNumber(principal.getName());
+            trafficLogService.setTrafficLogCheckOutTime(id, user.id());
             return "redirect:/traffic-log";
         } catch (IllegalStateException | IllegalArgumentException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
