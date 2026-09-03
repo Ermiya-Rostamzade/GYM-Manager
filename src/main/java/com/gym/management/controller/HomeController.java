@@ -12,36 +12,44 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+/**
+ * Public pages and registration endpoints.
+ */
 @Controller
 @RequiredArgsConstructor
-public class UserSelfController {
+public class HomeController {
 
     private final UserService userService;
 
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String login() {
         return "login";
     }
 
     @GetMapping("/register")
-    public String ShowRegisterForm(Model model) {
+    public String registerForm(Model model) {
         model.addAttribute("user", new UserRegisterRequest(null, null, null, Role.ATHLETE));
         return "register";
     }
 
     @PostMapping("/register")
-    public String RegisterUser(@Valid @ModelAttribute("user") UserRegisterRequest userRegisterRequest,
+    public String register(
+            @Valid @ModelAttribute("user") UserRegisterRequest request,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
         try {
-            userService.registerSelf(userRegisterRequest);
+            userService.registerSelf(request);
             return "redirect:/login?registered";
         } catch (IllegalArgumentException ex) {
-            bindingResult.rejectValue("mobileNumber", null, ex.getMessage());
+            bindingResult.rejectValue("mobileNumber", "duplicate", ex.getMessage());
             return "register";
         }
     }
-
 }

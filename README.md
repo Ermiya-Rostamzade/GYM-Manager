@@ -182,6 +182,17 @@ Once the application starts, the backend will be available at:
 http://localhost:8080
 ```
 
+The MVC layer is organized into three controllers:
+
+* `HomeController` — public landing, login, and registration pages.
+* `DashboardController` — authenticated member subscriptions, lockers, and traffic.
+* `AdminController` — administrator and reception operations.
+
+Canonical routes include `/dashboard`, `/dashboard/subscriptions/new`,
+`/dashboard/lockers`, `/dashboard/traffic`, and `/admin`. Legacy routes such as
+`/subscriptions/my-subscriptions` and `/lockers` remain available for compatibility.
+Administration requires `ADMIN`; reception traffic requires `RECEPTIONIST` or `ADMIN`.
+
 For example, the plans management endpoint is available at:
 ```text
 http://localhost:8080/admin/plans

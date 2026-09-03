@@ -105,6 +105,17 @@ public class TrafficLogService {
     }
 
     @Transactional
+    public void setTrafficLogCheckOutTimeByStaff(Long id) {
+        TrafficLog trafficLog = trafficLogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Traffic log not found with id: " + id));
+        if (trafficLog.getCheckOutTime() != null) {
+            throw new IllegalStateException("Traffic log has already been checked out: " + id);
+        }
+        trafficLog.setCheckOutTime(LocalDateTime.now());
+    }
+
+    @Transactional
     public void deleteTrafficLog(Long id) {
         TrafficLog trafficLog = trafficLogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
