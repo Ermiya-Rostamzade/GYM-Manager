@@ -8,7 +8,7 @@ import com.gym.management.entity.User;
 import com.gym.management.entity.enums.Role;
 import com.gym.management.mapper.UserMapper;
 import com.gym.management.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +32,8 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long id) {
-        return userMapper.toResponse(
-                userRepository.findById(id).orElse(null)
-        );
+        return userMapper.toResponse(userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id)));
     }
 
     public List<UserResponse> getAllUsers() {
@@ -45,13 +44,13 @@ public class UserService {
     }
 
     public UserResponse getUserByMobileNumber(String mobileNumber) {
-        return userMapper.toResponse(
-                userRepository.findByMobileNumber(mobileNumber).orElse(null)
-        );
+        return userMapper.toResponse(userRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with mobile number: " + mobileNumber)));
     }
 
     public User getUserEntityById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
 
     @Transactional
@@ -73,6 +72,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public UserResponse registerUser(UserRegisterRequest request) {
         if (userRepository.existsByMobileNumber(request.mobileNumber())) {
             throw new IllegalArgumentException("Mobile number is already registered");
@@ -101,6 +101,7 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
+    @Transactional
     public UserResponse registerSelf(UserRegisterRequest request) {
         if (userRepository.existsByMobileNumber(request.mobileNumber())) {
             throw new IllegalArgumentException("Mobile number is already registered.");

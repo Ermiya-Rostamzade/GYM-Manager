@@ -54,7 +54,8 @@ public class SubscriptionService {
                     }
                 });
         LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(plan.getDurationDays());
+        // End dates are inclusive, so a one-day plan is valid on its start date only.
+        LocalDate endDate = startDate.plusDays(plan.getDurationDays() - 1L);
 
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.setUser(user);

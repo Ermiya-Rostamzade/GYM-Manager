@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,16 +36,26 @@ public class PlanController {
 
     @PostMapping
     public String createPlan(
-            @Valid @ModelAttribute("plan") PlanCreateRequest request
+            @Valid @ModelAttribute("plan") PlanCreateRequest request,
+            BindingResult bindingResult,
+            Model model
     ) {
-        planService.createPlan(request);
-        return "redirect:/admin/plans";
+        if (bindingResult.hasErrors()) {
+            return "plan-form";
+        }
+        try {
+            planService.createPlan(request);
+            return "redirect:/admin/plans";
+        } catch (IllegalArgumentException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "plan-form";
+        }
     }
 
     @PostMapping("/delete/{id}")
     public String deletePlan(@PathVariable long id) {
-    planService.deletePlan(id);
-    return "redirect:/admin/plans";
+        planService.deletePlan(id);
+        return "redirect:/admin/plans";
     }
 
 

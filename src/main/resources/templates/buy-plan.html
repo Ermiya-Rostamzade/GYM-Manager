@@ -12,8 +12,8 @@
         <a th:href="@{/subscriptions/my-subscriptions}" class="button cancel">My Dashboard</a>
     </div>
 
-    <div th:if="${param.error}" style="color: #dc2626; margin-bottom: 20px;">
-        <span th:text="${param.error}"></span>
+    <div th:if="${errorMessage}" style="color: #dc2626; margin-bottom: 20px;">
+        <span th:text="${errorMessage}"></span>
     </div>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">

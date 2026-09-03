@@ -17,6 +17,8 @@
 
             <h1>Create Plan</h1>
 
+            <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+
             <form th:action="@{/admin/plans}" th:object="${plan}" method="post">
 
                 <div class="form-group">

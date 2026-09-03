@@ -7,8 +7,10 @@ import com.gym.management.service.PlanService;
 import com.gym.management.service.SubscriptionService;
 import com.gym.management.service.UserService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,21 +30,28 @@ public class SubscriptionController {
     @GetMapping("/buy")
     public String showBuyForm(Model model){
         model.addAttribute("plans",planService.getAllPlans());
-        return "buy-plan.html";
+        return "buy-plan";
     }
 
     @PostMapping("/purchase")
     public String purchasePlan(
-            @ModelAttribute BuySubscriptionRequest request,
+            @Valid @ModelAttribute BuySubscriptionRequest request,
+            BindingResult bindingResult,
             Principal principal,
             Model model
     ){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("plans", planService.getAllPlans());
+            return "buy-plan";
+        }
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         try{
             subscriptionService.buyAndActivateDirectly(user.id(),  request);
             return "redirect:/subscriptions/my-subscriptions?success";
         }catch(IllegalArgumentException | IllegalStateException e){
-            return  "redirect:/subscriptions/my-subscriptions?error" + e.getMessage();
+            model.addAttribute("plans", planService.getAllPlans());
+            model.addAttribute("errorMessage", e.getMessage());
+            return "buy-plan";
         }
     }
 

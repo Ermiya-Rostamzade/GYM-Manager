@@ -25,13 +25,14 @@ public class TrafficLogService {
     private final SubscriptionService subscriptionService;
 
 
+    @Transactional
     public TrafficLogResponse createTrafficLog(Long userId,TrafficLogUserRequest request) {
         User user = userService.getUserEntityById(userId);
 
         //Check for overlapping active gym sessions (check-in without check-out)
         trafficLogRepository.findFirstByUserIdAndCheckOutTimeIsNull(user.getId())
                 .ifPresent(activeLog -> {
-                    throw new IllegalStateException("User does not have an active and valid subscription");
+                    throw new IllegalStateException("User already has an open check-in.");
                 });
         UserSubscription activeSubscription = subscriptionService.getActiveUserSubscription(user.getId());
         if(activeSubscription == null) {
@@ -69,6 +70,13 @@ public class TrafficLogService {
                 .toList();
     }
 
+    public List<TrafficLogResponse> getTrafficLogsForUser(Long userId) {
+        return trafficLogRepository.findByUserIdOrderByCheckInTimeDesc(userId)
+                .stream()
+                .map(trafficLogMapper::toResponse)
+                .toList();
+    }
+
     public TrafficLog getTrafficLogEntityById(Long id) {
         return trafficLogRepository.findById(id).orElse(null);
     }
@@ -85,10 +93,14 @@ public class TrafficLogService {
     }
 
     @Transactional
-    public void setTrafficLogCheckOutTime(Long id) {
+    public void setTrafficLogCheckOutTime(Long id, Long userId) {
         TrafficLog trafficLog = trafficLogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Traffic log not found with id: " + id));
+
+        if (!trafficLog.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("You cannot check out another user's traffic log.");
+        }
 
         if (trafficLog.getCheckOutTime() != null) {
             throw new IllegalStateException(

@@ -34,9 +34,8 @@ public class PlanService {
     }
 
     public PlanResponse getPlanById(Long id) {
-        return planMapper.toResponse(
-                planRepository.findById(id).orElse(null)
-        );
+        return planMapper.toResponse(planRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Plan not found with id: " + id)));
     }
 
     public List<PlanResponse> getAllPlans() {
@@ -65,6 +64,7 @@ public class PlanService {
         plan.setTitle(request.title());
         plan.setPrice(request.price());
         plan.setDurationDays(request.durationDays());
+        plan.setTotalSessions(request.totalSessions());
         plan.setPlanType(request.planType());
 
         return planMapper.toResponse(plan);
