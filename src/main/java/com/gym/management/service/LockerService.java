@@ -1,6 +1,7 @@
 package com.gym.management.service;
 
 import com.gym.management.dto.request.LockerCreateRequest;
+import com.gym.management.dto.response.TrafficLogResponse;
 import com.gym.management.entity.Locker;
 import com.gym.management.entity.LockerReservation;
 import com.gym.management.entity.User;
@@ -8,6 +9,7 @@ import com.gym.management.entity.enums.GenderSection;
 import com.gym.management.entity.enums.LockerStatus;
 import com.gym.management.repository.LockerRepository;
 import com.gym.management.repository.LockerReservationRepository;
+import com.gym.management.repository.TrafficLogRepository;
 import com.gym.management.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class LockerService {
     private final LockerRepository lockerRepository;
     private final LockerReservationRepository lockerReservationRepository;
     private final UserRepository userRepository;
+    private final TrafficLogRepository trafficLogRepository;
 
     public List<Locker> getAllLockers() {
         return lockerRepository.findAll();
@@ -41,6 +44,11 @@ public class LockerService {
     @Transactional
     public LockerReservation reserveLocker(long userId, long lockerId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        boolean hasActiveCheckIn = trafficLogRepository.findFirstByUserIdAndCheckOutTimeIsNull(userId).isPresent();
+        if(!hasActiveCheckIn){
+            throw new IllegalStateException("You must check in to the gym before reserving a locker.");
+        }
 
         if (lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId).isPresent()) {
             throw new IllegalStateException("User is already reserved");
@@ -79,17 +87,40 @@ public class LockerService {
 
     @Transactional
     public Locker createLocker(LockerCreateRequest request) {
+        if (lockerRepository.existsByLockerNumberAndGenderSection(request.lockerNumber(), request.genderSection())) {
+            throw new IllegalArgumentException("A locker with this number already exists in the selected area.");
+        }
+
         Locker locker = new Locker();
         locker.setLockerNumber(request.lockerNumber());
         locker.setGenderSection(request.genderSection());
         locker.setStatus(LockerStatus.EMPTY);
-        locker.setHardwareIp(request.hardwareIp());
-        if (request.hardwareIp() != null && !request.hardwareIp().trim().isEmpty()) {
-            locker.setHardwareIp(request.hardwareIp().trim());
-        } else {
-            locker.setHardwareIp(null); // حتماً null ست شود نه رشته خالی ""
-        }
+        locker.setHardwareIp(request.hardwareIp() != null && !request.hardwareIp().trim().isEmpty() ? request.hardwareIp().trim() : null);
+
         return lockerRepository.save(locker);
+    }
+
+    @Transactional
+    public void updateLockerStatus(Long lockerId, LockerStatus newStatus) {
+        Locker locker = lockerRepository.findById(lockerId)
+                .orElseThrow(() -> new IllegalArgumentException("Locker not found"));
+
+        locker.setStatus(newStatus);
+        lockerRepository.save(locker);
+    }
+
+
+    @Transactional
+    public void releaseLockerSafely(Long userId) {
+        lockerReservationRepository.findFirstByUserIdAndReleasedAtIsNull(userId)
+                .ifPresent(reservation -> {
+                    reservation.setReleasedAt(LocalDateTime.now());
+                    lockerReservationRepository.save(reservation);
+
+                    Locker locker = reservation.getLocker();
+                    locker.setStatus(LockerStatus.EMPTY);
+                    lockerRepository.save(locker);
+                });
     }
 
 }

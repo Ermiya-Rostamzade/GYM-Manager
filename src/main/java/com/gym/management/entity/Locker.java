@@ -10,11 +10,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "lockers")
+@Table(name = "lockers", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"locker_number", "gender_section"})
+})
 @NoArgsConstructor
 public class Locker extends BaseEntity {
 
-    @Column(name = "locker_number", nullable = false, unique = true)
+    @Column(name = "locker_number", nullable = false)
     private String lockerNumber;
 
     @Enumerated(EnumType.STRING)
@@ -27,5 +29,4 @@ public class Locker extends BaseEntity {
 
     @Column(name = "hardware_ip", nullable = true, unique = true)
     private String hardwareIp;
-
 }
