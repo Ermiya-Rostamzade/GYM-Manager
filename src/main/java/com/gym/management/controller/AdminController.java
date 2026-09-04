@@ -104,6 +104,14 @@ public class AdminController {
     // LOCKER MANAGEMENT
     // ========================
 
+    @GetMapping("/lockers")
+    public String getAllLockers(Model model) {
+        model.addAttribute("mensLockers", lockerService.getAllLockerBySection(GenderSection.MEN));
+        model.addAttribute("womensLockers", lockerService.getAllLockerBySection(GenderSection.WOMEN));
+        model.addAttribute("statuses", com.gym.management.entity.enums.LockerStatus.values());
+        return "admin/lockers-list";
+    }
+
     @GetMapping("/lockers/new")
     public String showCreateLockerForm(Model model) {
         model.addAttribute("lockerRequest", new LockerCreateRequest("", GenderSection.MEN, ""));
@@ -121,15 +129,25 @@ public class AdminController {
             model.addAttribute("sections", GenderSection.values());
             return "admin/locker-create";
         }
-
         try {
             lockerService.createLocker(request);
-            redirectAttributes.addFlashAttribute("successMessage", "کمد با موفقیت تعریف شد.");
-            return "redirect:/lockers?section=" + request.genderSection();
+            redirectAttributes.addFlashAttribute("successMessage", "Locker created successfully.");
+            return "redirect:/admin/lockers";
         } catch (Exception ex) {
             model.addAttribute("errorMessage", ex.getMessage());
             model.addAttribute("sections", GenderSection.values());
             return "admin/locker-create";
         }
+    }
+
+    @PostMapping("/lockers/{id}/status")
+    public String updateLockerStatus(@PathVariable Long id, @RequestParam("status") com.gym.management.entity.enums.LockerStatus status, RedirectAttributes redirectAttributes) {
+        try {
+            lockerService.updateLockerStatus(id, status);
+            redirectAttributes.addFlashAttribute("successMessage", "Locker status updated.");
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
+        return "redirect:/admin/lockers";
     }
 }

@@ -22,6 +22,7 @@ public class TrafficLogService {
     private final TrafficLogRepository trafficLogRepository;
     private final TrafficLogMapper trafficLogMapper;
     private final SubscriptionService subscriptionService;
+    private final LockerService lockerService;
 
     @Transactional
     public TrafficLogResponse createTrafficLog(Long userId, TrafficLogUserRequest request) {
@@ -102,6 +103,7 @@ public class TrafficLogService {
         }
 
         trafficLog.setCheckOutTime(LocalDateTime.now());
+        lockerService.releaseLockerSafely(userId);
     }
 
     @Transactional
@@ -112,5 +114,7 @@ public class TrafficLogService {
 
         trafficLogRepository.delete(trafficLog);
     }
+
+
 
 }

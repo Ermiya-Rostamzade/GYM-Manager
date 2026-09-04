@@ -14,4 +14,7 @@ public interface LockerRepository extends JpaRepository<Locker, Long> {
 
     List<Locker> findByGenderSection(GenderSection genderSection);
 
+    // Add this method to LockerRepository interface
+    boolean existsByLockerNumberAndGenderSection(String lockerNumber, GenderSection genderSection);
+
 }

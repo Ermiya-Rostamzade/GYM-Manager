@@ -14,24 +14,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class UserSelfController {
+public class HomeController {
 
     private final UserService userService;
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm() {
         return "login";
     }
 
     @GetMapping("/register")
-    public String ShowRegisterForm(Model model) {
+    public String showRegisterForm(Model model) {
         model.addAttribute("user", new UserRegisterRequest(null, null, null, Role.ATHLETE));
         return "register";
     }
 
     @PostMapping("/register")
-    public String RegisterUser(@Valid @ModelAttribute("user") UserRegisterRequest userRegisterRequest,
-            BindingResult bindingResult) {
+    public String registerUser(@Valid @ModelAttribute("user") UserRegisterRequest userRegisterRequest,
+                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
@@ -44,4 +49,8 @@ public class UserSelfController {
         }
     }
 
+    @GetMapping("/403")
+    public String accessDenied() {
+        return "403";
+    }
 }

@@ -4,10 +4,11 @@ import com.gym.management.dto.request.UserLoginRequest;
 import com.gym.management.dto.request.UserProfileUpdateRequest;
 import com.gym.management.dto.request.UserRegisterRequest;
 import com.gym.management.dto.response.UserResponse;
-import com.gym.management.entity.User;
+import com.gym.management.entity.*;
+import com.gym.management.entity.enums.LockerStatus;
 import com.gym.management.entity.enums.Role;
 import com.gym.management.mapper.UserMapper;
-import com.gym.management.repository.UserRepository;
+import com.gym.management.repository.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,30 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    // Inject required repositories to handle cascading deletes
+    private final LockerReservationRepository lockerReservationRepository;
+    private final LockerRepository lockerRepository;
+    private final TrafficLogRepository trafficLogRepository;
+    private final UserSubscriptionRepository userSubscriptionRepository;
+    private final PaymentRepository paymentRepository;
+
     public UserService(
             UserRepository userRepository,
             UserMapper userMapper,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            LockerReservationRepository lockerReservationRepository,
+            LockerRepository lockerRepository,
+            TrafficLogRepository trafficLogRepository,
+            UserSubscriptionRepository userSubscriptionRepository,
+            PaymentRepository paymentRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.lockerReservationRepository = lockerReservationRepository;
+        this.lockerRepository = lockerRepository;
+        this.trafficLogRepository = trafficLogRepository;
+        this.userSubscriptionRepository = userSubscriptionRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public UserResponse getUserById(Long id) {
@@ -65,10 +83,34 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new IllegalArgumentException("User not found with id: " + id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+
+        // 1. Release active locker reservations
+        List<LockerReservation> reservations = lockerReservationRepository.findByUserId(id);
+        for (LockerReservation res : reservations) {
+            if (res.getReleasedAt() == null) {
+                Locker locker = res.getLocker();
+                locker.setStatus(LockerStatus.EMPTY);
+                lockerRepository.save(locker);
+            }
         }
-        userRepository.deleteById(id);
+        lockerReservationRepository.deleteAll(reservations);
+
+        // 2. Delete traffic logs
+        List<TrafficLog> logs = trafficLogRepository.findByUserIdOrderByCheckInTimeDesc(id);
+        trafficLogRepository.deleteAll(logs);
+
+        // 3. Delete subscriptions and associated payments
+        List<UserSubscription> subs = userSubscriptionRepository.findByUserId(id);
+        for (UserSubscription sub : subs) {
+            List<Payment> payments = paymentRepository.findByUserSubscriptionId(sub.getId());
+            paymentRepository.deleteAll(payments);
+        }
+        userSubscriptionRepository.deleteAll(subs);
+
+        // 4. Safely delete the user
+        userRepository.delete(user);
     }
 
     @Transactional

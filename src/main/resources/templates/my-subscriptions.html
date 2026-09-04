@@ -2,64 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>My Subscriptions</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <div>
-            <h1>Welcome <span th:text="${user.fullName}"></span></h1>
-            <p style="color: #6b7280; margin-top: 4px;">Mobile: <span th:text="${user.mobileNumber}"></span></p>
-        </div>
-        <div style="display: flex; gap: 10px;">
+<body class="bg-light">
 
-
-            <a th:href="@{/dashboard/lockers}" class="button" style="background-color: #059669; margin-left: 10px;">
-                🔑 View & Reserve Locker
-            </a>
-            <a th:href="@{/dashboard/buy}" class="button">+ Buy New Plan</a>
-            <form th:action="@{/logout}" method="post" style="display: inline;">
-                <button type="submit" class="button cancel">Logout</button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">Gym Manager</a>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-light d-none d-md-inline" th:text="${user.mobileNumber}"></span>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
             </form>
         </div>
     </div>
+</nav>
 
-    <div th:if="${param.success}" style="color: #16a34a; font-weight: bold; margin-bottom: 20px;">
-        🎉 Subscription purchased and activated successfully!
+<div class="container mt-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
+        <div>
+            <h2 class="mb-1">Welcome, <span th:text="${user.fullName}"></span></h2>
+            <p class="text-muted mb-0">Manage your gym plans and active sessions.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/dashboard/lockers}" class="btn btn-success">🔑 Lockers</a>
+            <a th:href="@{/dashboard/traffic-log}" class="btn btn-info text-white">⏱️ Traffic</a>
+            <a th:href="@{/dashboard/buy}" class="btn btn-primary">+ Buy Plan</a>
+        </div>
     </div>
 
-    <div class="table-container">
-        <table>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Plan Title</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th style="text-align: center;">Remaining Sessions</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="sub, stat : ${subscriptions}">
-                <td th:text="${stat.count}">1</td>
-                <td th:text="${sub.plan.title}">Monthly Gym</td>
-                <td th:text="${sub.startDate}">2026-08-01</td>
-                <td th:text="${sub.endDate}">2026-08-31</td>
-                <td style="text-align: center;" th:text="${sub.remainingSessions != null ? sub.remainingSessions : 'Unlimited'}">12</td>
-                <td>
-                    <span class="badge"
-                          th:classappend="${sub.status == 'ACTIVE'} ? 'badge-active' : 'badge-inactive'"
-                          th:text="${sub.status}">ACTIVE</span>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(subscriptions)}">
-                <td colspan="6" class="empty">You have no subscriptions yet. Click "Buy New Plan" to get started!</td>
-            </tr>
-            </tbody>
-        </table>
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        🎉 Subscription purchased and activated successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0 table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th class="ps-4">#</th>
+                    <th>Plan Title</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th class="text-center">Remaining Sessions</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sub, stat : ${subscriptions}">
+                    <td class="ps-4 text-muted" th:text="${stat.count}">1</td>
+                    <td class="fw-semibold" th:text="${sub.plan.title}">Monthly Gym</td>
+                    <td th:text="${sub.startDate}">2026-08-01</td>
+                    <td th:text="${sub.endDate}">2026-08-31</td>
+                    <td class="text-center fw-bold" th:text="${sub.remainingSessions != null ? sub.remainingSessions : 'Unlimited'}">12</td>
+                    <td>
+                        <span class="badge" th:classappend="${sub.status == 'ACTIVE'} ? 'bg-success' : 'bg-secondary'" th:text="${sub.status}">ACTIVE</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(subscriptions)}">
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        You have no subscriptions yet. Click <strong>+ Buy Plan</strong> to get started!
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

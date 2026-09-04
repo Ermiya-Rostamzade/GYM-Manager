@@ -2,42 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Gym Management</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container" style="max-width: 450px;">
-    <div class="card">
-        <div class="header">
-            <h1>Login to Gym</h1>
-        </div>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+<div class="container" style="max-width: 400px;">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+            <h3 class="text-center mb-4 fw-bold">Login to Gym</h3>
 
-        <div th:if="${param.error}" style="color: #dc2626; margin-bottom: 15px; font-size: 14px;">
-            Invalid mobile number or password.
-        </div>
-        <div th:if="${param.logout}" style="color: #16a34a; margin-bottom: 15px; font-size: 14px;">
-            You have been logged out successfully.
-        </div>
-        <div th:if="${param.registered}" style="color: #16a34a; margin-bottom: 15px; font-size: 14px;">
-            Registration successful! Please login.
-        </div>
-
-        <form th:action="@{/login}" method="post">
-            <div class="form-group">
-                <label for="mobileNumber">Mobile Number</label>
-                <input type="text" id="mobileNumber" name="mobileNumber" placeholder="09123456789" required autofocus />
+            <div th:if="${param.error}" class="alert alert-danger py-2 text-center" role="alert">
+                Invalid mobile number or password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success py-2 text-center" role="alert">
+                You have been logged out successfully.
+            </div>
+            <div th:if="${param.registered}" class="alert alert-success py-2 text-center" role="alert">
+                Registration successful! Please login.
             </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter password" required />
-            </div>
-
-            <div class="actions" style="flex-direction: column; gap: 12px;">
-                <button type="submit" style="width: 100%;">Sign In</button>
-                <a th:href="@{/register}" class="button cancel" style="text-align: center;">Don't have an account? Sign Up</a>
-            </div>
-        </form>
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label for="mobileNumber" class="form-label fw-semibold">Mobile Number</label>
+                    <input type="text" class="form-control" id="mobileNumber" name="mobileNumber" placeholder="09123456789" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary fw-semibold">Sign In</button>
+                    <a th:href="@{/register}" class="btn btn-light text-secondary border">Don't have an account? Sign Up</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
