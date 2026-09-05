@@ -32,14 +32,14 @@ public class AdminController {
     @GetMapping("/users")
     public String getAllUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "users";
+        return "admin/users";
     }
 
     @GetMapping("/users/new")
     public String showCreateUserForm(Model model) {
         model.addAttribute("user", new UserRegisterRequest(null, null, null, null));
         model.addAttribute("roles", Role.values());
-        return "user-form";
+        return "admin/user-form";
     }
 
     @PostMapping("/users")
@@ -49,7 +49,7 @@ public class AdminController {
             Model model) {
         if (result.hasErrors()) {
             model.addAttribute("roles", Role.values());
-            return "user-form";
+            return "admin/user-form";
         }
         userService.registerUser(request);
         return "redirect:/admin/users";
@@ -68,13 +68,13 @@ public class AdminController {
     @GetMapping("/plans")
     public String getAllPlans(Model model) {
         model.addAttribute("plans", planService.getAllPlans());
-        return "plans";
+        return "admin/plans";
     }
 
     @GetMapping("/plans/new")
     public String showCreatePlanForm(Model model) {
         model.addAttribute("plan", new PlanCreateRequest(null, null, null, null, null));
-        return "plan-form";
+        return "admin/plan-form";
     }
 
     @PostMapping("/plans")
@@ -83,14 +83,14 @@ public class AdminController {
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "plan-form";
+            return "admin/plan-form";
         }
         try {
             planService.createPlan(request);
             return "redirect:/admin/plans";
         } catch (IllegalArgumentException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "plan-form";
+            return "admin/plan-form";
         }
     }
 

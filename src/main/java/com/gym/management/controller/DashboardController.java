@@ -36,13 +36,13 @@ public class DashboardController {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("subscriptions", subscriptionService.getUserSubscriptions(user.id()));
-        return "my-subscriptions";
+        return "dashboard/my-subscriptions";
     }
 
     @GetMapping("/buy")
     public String showBuyForm(Model model) {
         model.addAttribute("plans", planService.getAllPlans());
-        return "buy-plan";
+        return "dashboard/buy-plan";
     }
 
     @PostMapping("/purchase")
@@ -53,7 +53,7 @@ public class DashboardController {
             Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("plans", planService.getAllPlans());
-            return "buy-plan";
+            return "dashboard/buy-plan";
         }
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         try {
@@ -62,7 +62,7 @@ public class DashboardController {
         } catch (IllegalArgumentException | IllegalStateException e) {
             model.addAttribute("plans", planService.getAllPlans());
             model.addAttribute("errorMessage", e.getMessage());
-            return "buy-plan";
+            return "dashboard/buy-plan";
         }
     }
 
@@ -76,7 +76,7 @@ public class DashboardController {
         model.addAttribute("currentSection", section);
         model.addAttribute("lockers", lockerService.getAllLockerBySection(section));
         model.addAttribute("activeReservation", activeReservation);
-        return "lockers";
+        return "dashboard/lockers";
     }
 
     @PostMapping("/lockers/reserve")
@@ -114,13 +114,13 @@ public class DashboardController {
     public String trafficLogs(Principal principal, Model model) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         model.addAttribute("trafficLogs", trafficLogService.getTrafficLogsForUser(user.id()));
-        return "traffic-logs";
+        return "dashboard/traffic-logs";
     }
 
     @GetMapping("/traffic-log/check-in")
     public String showCheckInForm(Model model) {
         model.addAttribute("trafficLogCheckIn", new TrafficLogUserRequest(null));
-        return "traffic-log-check-in";
+        return "dashboard/traffic-log-check-in";
     }
 
     @PostMapping("/traffic-log/check-in")
@@ -131,14 +131,14 @@ public class DashboardController {
             Model model) {
         UserResponse user = userService.getUserByMobileNumber(principal.getName());
         if (bindingResult.hasErrors()) {
-            return "traffic-log-check-in";
+            return "dashboard/traffic-log-check-in";
         }
         try {
             trafficLogService.createTrafficLog(user.id(), request);
             return "redirect:/dashboard/traffic-log";
         } catch (IllegalArgumentException | IllegalStateException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "traffic-log-check-in";
+            return "dashboard/traffic-log-check-in";
         }
     }
 
