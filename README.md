@@ -1,17 +1,19 @@
 # 🏋️‍♂️ Gym Management Application
 
 <p align="center">
-  <strong>A robust, enterprise-ready backend system for streamlining gym operations and automated facility workflows.</strong>
+  <strong>A robust, enterprise-ready management system for streamlining gym operations and automated facility workflows.</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java" />
   <img src="https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white" alt="Spring Boot" />
   <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white" alt="Spring Security" />
+  <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Data JPA" />
   <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white" alt="Hibernate" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
   <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white" alt="Thymeleaf" />
-  <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5" />
+  <img src="https://img.shields.io/badge/Bootstrap-5.3_(RTL)-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5 RTL" />
+  <img src="https://img.shields.io/badge/MapStruct-Latest-E53935?style=for-the-badge&logo=mapstruct&logoColor=white" alt="MapStruct" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
 
@@ -19,187 +21,270 @@
 
 ## 📌 Overview
 
-A backend application for managing the core operations of a gym, built with **Java** and **Spring Boot**.
+A modern gym and sports complex management platform built with **Java 17+** and **Spring Boot 3.x**. 
 
-The system is designed around the day-to-day workflow of a gym, including member management, subscription plans, payments, access tracking, locker management, and role-based permissions.
-
-The application provides a structured backend for managing gym members and the services they use.
+The system automates the complete operational lifecycle of a gym: member onboarding, subscription packages, online payments, facility entry/exit tracking (QR Code, RFID, Biometrics), smart locker allocations with hardware integration capabilities, and granular role-based security.
 
 ### 🧩 Core Domain Model
-* 👤 **Users** — Gym members and staff with different roles.
-* 📋 **Plans** — Membership plans with different durations, prices, and types.
-* 🎫 **Subscriptions** — Memberships assigned to users based on selected plans.
-* 💳 **Payments** — Payment records associated with subscriptions.
-* ⏱️ **Traffic Logs** — Records of gym access, including check-in and check-out.
-* 🔐 **Lockers** — Physical lockers and their current availability.
-* 🔑 **Locker Reservations** — Locker assignments associated with users and their gym visits.
-* 🛡️ **Roles & Permissions** — Role and permission management for controlling access.
+* 👤 **Users** — Athletes, Admins, and Receptionists with mobile-first authentication.
+* 📋 **Plans** — Membership catalog with session limits, day validity, and hybrid constraints.
+* 🎫 **Subscriptions** — Active member passes bound to specific plans and usage tracking.
+* 💳 **Payments** — Transaction logs tied to subscriptions, tracking payment states and bank ref codes.
+* ⏱️ **Traffic Logs** — Automated check-in and check-out logs validating physical facility visits.
+* 🔐 **Lockers** — Gender-segregated locker management featuring hardware controller IP mapping.
+* 🔑 **Locker Reservations** — Active and historical locker assignments linked to athlete visits.
+* 🛡️ **Roles & Permissions** — Dynamic, decoupled permission assignment.
+* 🔔 **Notifications** — Targeted system notifications dispatched to users.
 
-The project is structured to keep responsibilities separated and provide a maintainable foundation for extending the system as the application grows.
+---
 
+## 🗄️ Database ER Diagram
+
+The following Entity-Relationship diagram illustrates the core data structure and relationships within the PostgreSQL database:
+
+```mermaid
+erDiagram
+    USER ||--o{ ROLE_PERMISSION : "has"
+    USER ||--o{ NOTIFICATION : "receives"
+    USER ||--o{ USER_SUBSCRIPTION : "subscribes"
+    USER ||--o{ TRAFFIC_LOG : "records"
+    USER ||--o{ LOCKER_RESERVATION : "makes"
+    PLAN ||--o{ USER_SUBSCRIPTION : "includes"
+    USER_SUBSCRIPTION ||--o{ PAYMENT : "generates"
+    LOCKER ||--o{ LOCKER_RESERVATION : "has"
+
+    USER {
+        Long id PK
+        String mobileNumber "UK"
+        String fullName
+        String password
+        Role role
+        Boolean isActive
+        LocalDateTime createdAt
+    }
+    
+    PLAN {
+        Long id PK
+        String title "UK"
+        BigDecimal price
+        Integer durationDays
+        Integer totalSessions
+        PlanType planType
+    }
+
+    USER_SUBSCRIPTION {
+        Long id PK
+        LocalDate startDate
+        LocalDate endDate
+        Integer remainingSessions
+        SubscriptionStatus status
+        Long user_id FK
+        Long plan_id FK
+    }
+
+    PAYMENT {
+        Long id PK
+        BigDecimal amount
+        String refCode
+        PaymentStatus status
+        LocalDateTime paidAt
+        Long subscription_id FK
+    }
+
+    TRAFFIC_LOG {
+        Long id PK
+        LocalDateTime checkInTime
+        LocalDateTime checkOutTime
+        TrafficLogMethod method
+        Long user_id FK
+    }
+
+    LOCKER {
+        Long id PK
+        String lockerNumber
+        GenderSection genderSection
+        LockerStatus status
+        String hardwareIp
+    }
+
+    LOCKER_RESERVATION {
+        Long id PK
+        LocalDateTime assignedAt
+        LocalDateTime releasedAt
+        Long user_id FK
+        Long locker_id FK
+    }
+```
 ---
 
 ## 🛠️ Tech Stack
 
 | Technology | Role / Usage |
 | :--- | :--- |
-| **Java** | Primary programming language (17+) |
-| **Spring Boot** | Application framework & dependency injection container |
-| **Spring Data JPA** | Simplified data access abstraction layer |
-| **Spring Security** | Authentication, authorization, and endpoint protection |
-| **Hibernate** | Object-Relational Mapping (ORM) engine |
-| **PostgreSQL** | Relational database storage |
-| **Maven** | Build management and dependency resolution |
+| **Java 17+** | Core programming language leveraging modern features (Records, Sealed Types) |
+| **Spring Boot 3.x** | Core application framework & dependency injection engine |
+| **Spring Data JPA** | Data access abstraction and dynamic query generation |
+| **Spring Security** | Role-based authorization, custom user details authentication, and endpoint filters |
+| **Hibernate ORM** | Object-Relational Mapping, lifecycle callbacks, and schema management |
+| **PostgreSQL** | High-performance relational database storage |
+| **Thymeleaf** | Server-Side Rendering (SSR) templating engine with modular layout architecture |
+| **Bootstrap 5 (RTL)** | Fully responsive layout supporting right-to-left UI directionality |
+| **MapStruct** | Compile-time type-safe Bean mappings between JPA Entities and Request/Response DTOs |
+| **Lombok** | Boilerplate reduction for entity models and logging |
+| **Jakarta Validation** | Declarative request payload verification and regex pattern validation |
+| **Maven** | Dependency management, build automation, and code generation pipelines |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture & Project Structure
 
-The application follows a layered architecture with clear separation between request handling, business logic, persistence, and domain representation.
+The project strictly follows a layered architectural design pattern:
 
 ```text
 src/main/java/com/gym/management
 │
-├── config                 # Global configurations & framework setups
-├── controller             # REST & MVC endpoints handling HTTP traffic
-├── dto                    # Data Transfer Objects
-│   ├── request            # Client-to-server payload models
-│   └── response           # Structured server-to-client responses
-├── entity                 # Database persistence models (JPA Entities)
-├── exception              # Centralized error handling & custom exceptions
-├── mapper                 # Object mapping contracts (Entity <-> DTO)
-├── repository             # Data access interfaces extending Spring Data JPA
-├── service                # Core business rules and domain logic orchestration
-├── security               # Security filters, tokens, and role definitions
-└── util                   # Shared helper utilities and common constants
+├── controller           # Web MVC & REST endpoints handling incoming requests
+│   └── advice           # Global exception handler & centralized error processing
+├── dto                  # Data Transfer Objects
+│   ├── request          # Validated payloads received from forms/clients
+│   └── response         # Structured views returned to templates or APIs
+├── entity               # Persistent JPA entities inheriting BaseEntity auditing
+│   └── enums            # Strongly typed domain constants (Role, Status, Method)
+├── mapper               # MapStruct interfaces generating mapper implementations
+├── repository           # Spring Data JPA repositories with query conventions
+├── security             # UserDetailsService, password encoders, and WebSecurityConfig
+└── service              # Business logic transactions, operations, and rule validations
 ```
 
-### 📐 Structural Responsibilities
-* **API Layer** — Handles incoming HTTP requests and produces API responses.
-* **Application Layer** — Coordinates business operations and enforces application rules.
-* **Persistence Layer** — Handles database access and entity persistence.
-* **Domain & Data Mapping** — Represents persistent data and separates internal entities from API contracts.
-* **Cross-Cutting Concerns** — Provides shared infrastructure such as configuration, exception handling, security, and utilities.
-
-> This separation helps keep business logic independent from transport and persistence concerns while making individual components easier to maintain and test.
-
----
-
-## ⚖️ Business Rules
-
-The application models several rules around memberships, access, payments, and lockers:
-
-### 👤 Users
-* A user can have a defined role such as `ATHLETE`, `ADMIN`, or `RECEPTIONIST`.
-* Users can be marked as active or inactive.
-* A user can have multiple subscriptions over time.
-
-### 📋 Membership Plans
-* A plan defines a membership's **title, price, duration, and type**.
-* Supported plan types currently include `MONTHLY`, `SESSIONAL`, and `VIP`.
-
-### 🎫 Subscriptions
-* A subscription belongs to both a user and a membership plan.
-* A subscription has a start date and an end date.
-* A subscription tracks the user's remaining sessions where applicable.
-* A subscription has a lifecycle status such as `PENDING`, `ACTIVE`, or `EXPIRED`.
-
-### 💳 Payments
-* Payments are associated with a specific subscription.
-* A payment records its amount, reference code, status, and payment timestamp.
-* Payment status distinguishes successful and failed transactions.
-
-### 🚪 Gym Access
-* Each traffic log belongs to a user.
-* A traffic log records both check-in and check-out activity.
-* Access can be recorded through supported methods such as `QR_CODE`, `RFID`, or `FINGERPRINT`.
-
-### 🔐 Lockers
-* Each locker has a unique locker number.
-* Lockers are organized by gender section.
-* A locker can be `EMPTY`, `OCCUPIED`, or under `MAINTENANCE`.
-* Locker reservations associate a user with a specific locker during their gym visit.
-* A reservation can be active or closed.
-* A locker reservation can be linked to the traffic log that validates the user's presence.
-
-### 🛡️ Roles & Permissions
-* Users can have permissions associated with their account.
-* Permissions are represented separately from the user entity, allowing access rules to evolve without tightly coupling them to the core user model.
+```text
+src/main/resources
+│
+├── static               # Static assets (Custom app.css, app.js, Bootstrap RTL)
+│   ├── css/
+│   └── js/
+└── templates            # Thymeleaf templates and layouts
+    ├── admin/           # Administrative consoles (Lockers, Plans, Users)
+    ├── dashboard/       # Athlete portals (Purchases, Subscriptions, Traffic)
+    ├── fragments/       # Reusable components (Navbars, Footer)
+    └── layout/          # Base template wrappers (Public, Auth, Dashboard, Admin)
+```
 
 ---
 
-## ⚙️ Core Services
+## 🗺️ Application Routes & Page Directory
 
-The application is organized around dedicated services for each major domain:
+The interface is divided into three functional domains: **Public**, **Athlete Dashboard**, and **Administrative Panel**.
 
-| Service | Responsibility |
-| :--- | :--- |
-| `UserService` | Manage users and their core information |
-| `PlanService` | Manage gym membership plans |
-| `UserSubscriptionService` | Manage user subscriptions and their lifecycle |
-| `PaymentService` | Manage payment records associated with subscriptions |
-| `TrafficLogService` | Track user check-in and check-out activity |
-| `LockerService` | Manage lockers and their availability |
-| `LockerReservationService` | Manage locker assignments and reservations |
-| `RolePermissionService` | Manage roles and user permissions |
+### 🌐 Public & Authentication Endpoints
+| Route | Method | Access Level | Description |
+| :--- | :---: | :---: | :--- |
+| `/` or `/home` | `GET` | Public | Landing page showcasing gym facilities, plans, and contact details |
+| `/login` | `GET` / `POST` | Public | Mobile-number-based credential authentication |
+| `/register` | `GET` / `POST` | Public | Member onboarding registration form |
+| `/error` / `/403` | `GET` | Public | Standard fallback and access denial pages |
+
+### 🏋️ Athlete Dashboard (`/dashboard/*`)
+| Route | Method | Access Level | Description |
+| :--- | :---: | :---: | :--- |
+| `/dashboard/my-subscriptions` | `GET` | Athlete | View active subscriptions, validity periods, and remaining sessions |
+| `/dashboard/buy-plan` | `GET` / `POST` | Athlete | Browse membership plans and initiate direct online purchases |
+| `/dashboard/traffic-logs` | `GET` | Athlete | Full personal entry/exit log and attendance history |
+| `/dashboard/traffic-log/check-in` | `GET` / `POST` | Athlete | Self check-in terminal scanning QR codes |
+| `/dashboard/traffic-log/check-out` | `GET` / `POST` | Athlete | Facility check-out terminal and locker release trigger |
+| `/dashboard/lockers` | `GET` | Athlete | View assigned locker details during ongoing visits |
+
+### 🛠️ Administration Panel (`/admin/*`)
+| Route | Method | Access Level | Description |
+| :--- | :---: | :---: | :--- |
+| `/admin/panel` | `GET` | Admin / Receptionist | Main operational overview and gym metric dashboard |
+| `/admin/plans` | `GET` | Admin | Membership plan inventory and active package pricing |
+| `/admin/plans/new` | `GET` / `POST` | Admin | Create or edit membership packages (`PlanCreateRequest`) |
+| `/admin/users` | `GET` | Admin / Receptionist | Member search, account activation toggles, and role assignments |
+| `/admin/users/new` | `GET` / `POST` | Admin | Staff-assisted registration for new gym members |
+| `/admin/lockers` | `GET` | Admin / Receptionist | Real-time locker matrix (Empty, Occupied, Maintenance) |
+| `/admin/lockers/new` | `GET` / `POST` | Admin | Register new lockers with hardware IP mapping |
+
+---
+
+## ⚖️ Business Rules & Implementation Logic
+
+### 👤 Identity & Access Control
+* **Mobile-Centric Login:** Mobile number (`09xxxxxxxxx`, validated by `^09\d{9}$`) serves as the unique identifier (`username`).
+* **Active Status Verification:** Inactive users (`isActive = false`) are automatically blocked during authentication by `CustomUserDetailsService`.
+* **Auditing Guarantee:** Every table records `createdAt` and `updatedAt` timestamps automatically via `@EnableJpaAuditing` and Spring Data's `AuditingEntityListener`.
+
+### 📋 Membership & Subscription Lifecycle
+* **Plan Flexibility:** Supports `SESSION_BASED`, `TIME_BASED`, and `HYBRID` models.
+* **Duration Constraints:** Plans require positive price amounts and a defined duration in days.
+* **Session Tracking:** Subscriptions deduct sessions upon valid gym check-in; time-based plans expire based on `endDate`.
+
+### 🚪 Automated Traffic & Access Control
+* **Multi-Modal Verification:** Access logs record the hardware entry method:
+  * `QR_CODE`: Dynamic terminal scanning via mobile.
+  * `RFID`: Proximity card scanner input.
+  * `FINGERPRINT`: Biometric turnstile integration.
+* **Visit State:** Prevents simultaneous duplicate entries if a user has not logged a check-out time.
+
+### 🔐 Facility & Smart Locker Management
+* **Gender Separation:** Lockers are categorized by `MEN` or `WOMEN` changing rooms (`GenderSection`).
+* **Hardware Interoperability:** Each locker can store a `hardwareIp` address for integration with network-attached electric strikes / relays.
+* **Reservation Lifecycle:** Lockers transition dynamically across `EMPTY`, `OCCUPIED`, and `MAINTENANCE` statuses.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+* **Java Development Kit (JDK):** Version 17 or higher
+* **Relational Database:** PostgreSQL 14+
+* **Build System:** Maven 3.9+ (or use the packaged `./mvnw`)
 
-Make sure the following tools are installed and configured on your system:
-* **Java** (v17 or higher)
-* **PostgreSQL** (v14+ recommended)
-* **Maven** (or use the included Maven Wrapper)
+### 🗄️ Database Setup & Configuration
 
-### 🗄️ Database Configuration
+1. Create a dedicated database in your PostgreSQL instance:
+   ```sql
+   CREATE DATABASE gym_db;
+   ```
 
-1. Create a PostgreSQL database for the application.
-2. Configure the required database environment variables in a `.env` file (or application properties):
+2. Configure application environment variables. You can provide these through your system environment, an external `.env` file, or by updating `src/main/resources/application.properties`:
 
-```env
-DB_URL=jdbc:postgresql://localhost:5432/gym_db
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
-```
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/gym_db
+   spring.datasource.username=postgres
+   spring.datasource.password=your_secure_password
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=false
+   ```
 
-### 🏃 Run the Application
-
-Using the Maven Wrapper:
+### 🏃 Building & Running
 
 * **Windows (PowerShell):**
   ```powershell
-  .\mvnw clean spring-boot:run
+  .\mvnw.cmd clean spring-boot:run
   ```
+
 * **Linux / macOS:**
   ```bash
+  chmod +x mvnw
   ./mvnw clean spring-boot:run
   ```
 
-Once the application starts, the backend will be available at:
-```text
-http://localhost:8080
-```
-
-For example, the plans management endpoint is available at:
-```text
-http://localhost:8080/admin/plans
-```
+Once launched, access the application in your browser:
+* **Home Page:** [http://localhost:8080](http://localhost:8080)
+* **Login:** [http://localhost:8080/login](http://localhost:8080/login)
+* **Admin Console:** [http://localhost:8080/admin/panel](http://localhost:8080/admin/panel)
 
 ---
 
-## 📈 Project Status
+## 📈 Roadmap & Future Improvements
 
-> **Note:** This project is under active development.
-
-The current implementation focuses on establishing the core domain model, business services, persistence layer, and API structure. Additional capabilities and infrastructure will be introduced incrementally as the application evolves.
+- [ ] Complete RESTful API controllers with JWT bearer authentication for companion mobile apps.
+- [ ] Direct payment gateway driver integration (Zarinpal / Shetab IPG).
+- [ ] MQTT / Socket client driver for physical turnstile and smart locker relay controllers.
+- [ ] Scheduled background tasks (`@Scheduled`) for automated expiration of subscriptions.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
-
-See the `LICENSE` file for the full license text.
+This project is open-source and licensed under the **MIT License**. See the `LICENSE` file for details.
