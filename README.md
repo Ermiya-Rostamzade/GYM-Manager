@@ -44,76 +44,89 @@ The following Entity-Relationship diagram illustrates the core data structure an
 
 ```mermaid
 erDiagram
-    USER ||--o{ ROLE_PERMISSION : "has"
-    USER ||--o{ NOTIFICATION : "receives"
-    USER ||--o{ USER_SUBSCRIPTION : "subscribes"
-    USER ||--o{ TRAFFIC_LOG : "records"
-    USER ||--o{ LOCKER_RESERVATION : "makes"
-    PLAN ||--o{ USER_SUBSCRIPTION : "includes"
-    USER_SUBSCRIPTION ||--o{ PAYMENT : "generates"
-    LOCKER ||--o{ LOCKER_RESERVATION : "has"
-
-    USER {
-        Long id PK
-        String mobileNumber "UK"
-        String fullName
-        String password
-        Role role
-        Boolean isActive
-        LocalDateTime createdAt
-    }
-    
-    PLAN {
-        Long id PK
-        String title "UK"
-        BigDecimal price
-        Integer durationDays
-        Integer totalSessions
-        PlanType planType
+    USERS {
+        int id PK
+        string mobile_number
+        string full_name
+        string role "ATHLETE, ADMIN, RECEPTIONIST"
+        boolean is_active
+        datetime created_at
     }
 
-    USER_SUBSCRIPTION {
-        Long id PK
-        LocalDate startDate
-        LocalDate endDate
-        Integer remainingSessions
-        SubscriptionStatus status
-        Long user_id FK
-        Long plan_id FK
+    ROLES_PERMISSIONS {
+        int id PK
+        int user_id FK
+        string permission_name
     }
 
-    PAYMENT {
-        Long id PK
-        BigDecimal amount
-        String refCode
-        PaymentStatus status
-        LocalDateTime paidAt
-        Long subscription_id FK
+    NOTIFICATIONS {
+        int id PK
+        int user_id FK
+        string message
     }
 
-    TRAFFIC_LOG {
-        Long id PK
-        LocalDateTime checkInTime
-        LocalDateTime checkOutTime
-        TrafficLogMethod method
-        Long user_id FK
+    PLANS {
+        int id PK
+        string title
+        decimal price
+        int duration_days
+        string plan_type "MONTHLY, SESSIONAL, VIP"
     }
 
-    LOCKER {
-        Long id PK
-        String lockerNumber
-        GenderSection genderSection
-        LockerStatus status
-        String hardwareIp
+    USER_SUBSCRIPTIONS {
+        int id PK
+        int user_id FK
+        int plan_id FK
+        date start_date
+        date end_date
+        int remaining_sessions
+        string status "ACTIVE, EXPIRED, PENDING"
     }
 
-    LOCKER_RESERVATION {
-        Long id PK
-        LocalDateTime assignedAt
-        LocalDateTime releasedAt
-        Long user_id FK
-        Long locker_id FK
+    PAYMENTS {
+        int id PK
+        int subscription_id FK
+        decimal amount
+        string ref_code
+        string status "SUCCESS, FAILED"
+        datetime paid_at
     }
+
+    TRAFFIC_LOGS {
+        int id PK
+        int user_id FK
+        datetime check_in_time
+        datetime check_out_time
+        string method "QR_CODE, RFID, FINGERPRINT"
+    }
+
+    LOCKERS {
+        int id PK
+        string locker_number
+        string gender_section "MEN, WOMEN"
+        string status "EMPTY, OCCUPIED, MAINTENANCE"
+        string hardware_ip
+    }
+
+    LOCKER_RESERVATIONS {
+        int id PK
+        int user_id FK
+        int locker_id FK
+        int traffic_log_id FK
+        datetime assigned_at
+        datetime released_at
+        string status "ACTIVE, CLOSED"
+    }
+
+    USERS ||--o{ NOTIFICATIONS : "send"
+    USERS ||--o{ ROLES_PERMISSIONS : "has"
+    USERS ||--o{ USER_SUBSCRIPTIONS : "buys"
+    PLANS ||--o{ USER_SUBSCRIPTIONS : "defines"
+    USER_SUBSCRIPTIONS ||--o{ PAYMENTS : "generates"
+    USERS ||--o{ TRAFFIC_LOGS : "records"
+    USERS ||--o{ LOCKER_RESERVATIONS : "reserves"
+    LOCKERS ||--o{ LOCKER_RESERVATIONS : "assigned_to"
+    TRAFFIC_LOGS ||--o| LOCKER_RESERVATIONS : "validates_presence"
 ```
 ---
 
