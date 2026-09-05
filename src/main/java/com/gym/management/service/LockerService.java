@@ -1,7 +1,6 @@
 package com.gym.management.service;
 
 import com.gym.management.dto.request.LockerCreateRequest;
-import com.gym.management.dto.response.TrafficLogResponse;
 import com.gym.management.entity.Locker;
 import com.gym.management.entity.LockerReservation;
 import com.gym.management.entity.User;
