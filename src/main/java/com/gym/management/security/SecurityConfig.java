@@ -23,7 +23,7 @@ public class SecurityConfig {
                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_RECEPTIONIST"));
 
             if (isAdminOrStaff) {
-                response.sendRedirect("/admin/users");
+                response.sendRedirect("/admin");
             } else {
                 response.sendRedirect("/dashboard");
             }
