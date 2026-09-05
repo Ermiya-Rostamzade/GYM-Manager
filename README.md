@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white" alt="Hibernate" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
   <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white" alt="Thymeleaf" />
-  <img src="https://img.shields.io/badge/Bootstrap-5.3_(RTL)-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5 RTL" />
+  <img src="https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5 RTL" />
   <img src="https://img.shields.io/badge/MapStruct-Latest-E53935?style=for-the-badge&logo=mapstruct&logoColor=white" alt="MapStruct" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
