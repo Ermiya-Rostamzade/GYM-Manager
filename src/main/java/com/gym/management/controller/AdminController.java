@@ -25,6 +25,11 @@ public class AdminController {
     private final PlanService planService;
     private final LockerService lockerService;
 
+    @GetMapping
+    public String adminDashboard() {
+        return "admin/panel";
+    }
+
     // ========================
     // USER MANAGEMENT
     // ========================
@@ -141,7 +146,9 @@ public class AdminController {
     }
 
     @PostMapping("/lockers/{id}/status")
-    public String updateLockerStatus(@PathVariable Long id, @RequestParam("status") com.gym.management.entity.enums.LockerStatus status, RedirectAttributes redirectAttributes) {
+    public String updateLockerStatus(@PathVariable Long id,
+            @RequestParam("status") com.gym.management.entity.enums.LockerStatus status,
+            RedirectAttributes redirectAttributes) {
         try {
             lockerService.updateLockerStatus(id, status);
             redirectAttributes.addFlashAttribute("successMessage", "Locker status updated.");
