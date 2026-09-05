@@ -141,7 +141,7 @@ erDiagram
 | **Hibernate ORM** | Object-Relational Mapping, lifecycle callbacks, and schema management |
 | **PostgreSQL** | High-performance relational database storage |
 | **Thymeleaf** | Server-Side Rendering (SSR) templating engine with modular layout architecture |
-| **Bootstrap 5 (RTL)** | Fully responsive layout supporting right-to-left UI directionality |
+| **Bootstrap 5** | Fully responsive layout supporting right-to-left UI directionality |
 | **MapStruct** | Compile-time type-safe Bean mappings between JPA Entities and Request/Response DTOs |
 | **Lombok** | Boilerplate reduction for entity models and logging |
 | **Jakarta Validation** | Declarative request payload verification and regex pattern validation |
