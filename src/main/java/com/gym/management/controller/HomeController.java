@@ -20,7 +20,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/login";
+        return "home";
     }
 
     @GetMapping("/login")
@@ -36,7 +36,7 @@ public class HomeController {
 
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("user") UserRegisterRequest userRegisterRequest,
-                               BindingResult bindingResult) {
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
