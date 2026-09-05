@@ -1,67 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/admin}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Locker Setup - Gym Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>New Locker Setup</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nav = document.querySelector('nav');
+            if (nav) {
+                const lockersLink = nav.querySelector('a[href$="/admin/lockers"]');
+                if (lockersLink) {
+                    lockersLink.classList.add('active');
+                }
+            }
+        });
+    </script>
 </head>
-<body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">Admin Portal</a>
-        <div class="navbar-nav me-auto">
-            <a class="nav-link" th:href="@{/admin/users}">Users</a>
-            <a class="nav-link" th:href="@{/admin/plans}">Plans</a>
-            <a class="nav-link active" th:href="@{/admin/lockers/new}">Lockers</a>
+<body>
+
+    <main layout:fragment="content">
+        <div class="container" style="max-width: 500px;">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                    <h3 class="mb-0 fw-bold">Add New Locker</h3>
+                    <p class="text-muted small mt-1">Configure locker assignment and hardware settings.</p>
+                </div>
+                <div class="card-body p-4">
+
+                    <div th:if="${successMessage}" class="alert alert-success py-2" role="alert"
+                        th:text="${successMessage}"></div>
+                    <div th:if="${errorMessage}" class="alert alert-danger py-2" role="alert" th:text="${errorMessage}">
+                    </div>
+
+                    <form th:action="@{/admin/lockers}" th:object="${lockerRequest}" method="post">
+                        <div class="mb-3">
+                            <label for="lockerNumber" class="form-label fw-semibold">Locker Number</label>
+                            <input type="text" class="form-control"
+                                th:classappend="${#fields.hasErrors('lockerNumber')} ? 'is-invalid' : ''"
+                                id="lockerNumber" th:field="*{lockerNumber}" placeholder="e.g. M-101" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('lockerNumber')}"
+                                th:errors="*{lockerNumber}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="genderSection" class="form-label fw-semibold">Locker Room Section</label>
+                            <select class="form-select"
+                                th:classappend="${#fields.hasErrors('genderSection')} ? 'is-invalid' : ''"
+                                id="genderSection" th:field="*{genderSection}">
+                                <option th:each="sec : ${sections}" th:value="${sec}"
+                                    th:text="${sec.name() == 'MEN' ? 'Men' : 'Women'}"></option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('genderSection')}"
+                                th:errors="*{genderSection}"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="hardwareIp" class="form-label fw-semibold">Lock IP Address <span
+                                    class="fw-normal text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control"
+                                th:classappend="${#fields.hasErrors('hardwareIp')} ? 'is-invalid' : ''" id="hardwareIp"
+                                th:field="*{hardwareIp}" placeholder="192.168.1.50">
+                            <div class="form-text">Used for electronic smart locks and access terminals.</div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('hardwareIp')}"
+                                th:errors="*{hardwareIp}"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/dashboard/lockers}" class="btn btn-light border text-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Locker</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <form th:action="@{/logout}" method="post" class="m-0">
-            <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
-        </form>
-    </div>
-</nav>
+    </main>
 
-<div class="container" style="max-width: 500px;">
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-            <h3 class="mb-0 fw-bold">Add New Locker</h3>
-            <p class="text-muted small mt-1">Configure locker assignment and hardware settings.</p>
-        </div>
-        <div class="card-body p-4">
-
-            <div th:if="${successMessage}" class="alert alert-success py-2" role="alert" th:text="${successMessage}"></div>
-            <div th:if="${errorMessage}" class="alert alert-danger py-2" role="alert" th:text="${errorMessage}"></div>
-
-            <form th:action="@{/admin/lockers}" th:object="${lockerRequest}" method="post">
-                <div class="mb-3">
-                    <label for="lockerNumber" class="form-label fw-semibold">Locker Number</label>
-                    <input type="text" class="form-control" th:classappend="${#fields.hasErrors('lockerNumber')} ? 'is-invalid' : ''" id="lockerNumber" th:field="*{lockerNumber}" placeholder="e.g. M-101" required>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lockerNumber')}" th:errors="*{lockerNumber}"></div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="genderSection" class="form-label fw-semibold">Locker Room Section</label>
-                    <select class="form-select" th:classappend="${#fields.hasErrors('genderSection')} ? 'is-invalid' : ''" id="genderSection" th:field="*{genderSection}">
-                        <option th:each="sec : ${sections}" th:value="${sec}" th:text="${sec.name() == 'MEN' ? 'Men' : 'Women'}"></option>
-                    </select>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('genderSection')}" th:errors="*{genderSection}"></div>
-                </div>
-
-                <div class="mb-4">
-                    <label for="hardwareIp" class="form-label fw-semibold">Lock IP Address <span class="fw-normal text-muted">(Optional)</span></label>
-                    <input type="text" class="form-control" th:classappend="${#fields.hasErrors('hardwareIp')} ? 'is-invalid' : ''" id="hardwareIp" th:field="*{hardwareIp}" placeholder="192.168.1.50">
-                    <div class="form-text">Used for electronic smart locks and access terminals.</div>
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('hardwareIp')}" th:errors="*{hardwareIp}"></div>
-                </div>
-
-                <div class="d-flex justify-content-end gap-2">
-                    <a th:href="@{/dashboard/lockers}" class="btn btn-light border text-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Save Locker</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 </body>
+
 </html>

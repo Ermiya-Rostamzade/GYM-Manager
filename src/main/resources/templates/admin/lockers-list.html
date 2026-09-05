@@ -1,119 +1,133 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/admin}">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locker Management - Gym Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Locker Management</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nav = document.querySelector('nav');
+            if (nav) {
+                const lockersLink = nav.querySelector('a[href$="/admin/lockers"]');
+                if (lockersLink) {
+                    lockersLink.classList.add('active');
+                }
+            }
+        });
+    </script>
 </head>
-<body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">Admin Portal</a>
-        <div class="navbar-nav me-auto">
-            <a class="nav-link" th:href="@{/admin/users}">Users</a>
-            <a class="nav-link" th:href="@{/admin/plans}">Plans</a>
-            <a class="nav-link active" th:href="@{/admin/lockers}">Lockers</a>
-        </div>
-        <form th:action="@{/logout}" method="post" class="m-0">
-            <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
-        </form>
-    </div>
-</nav>
+<body>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Locker Management</h2>
-        <a th:href="@{/admin/lockers/new}" class="btn btn-primary">+ Add New Locker</a>
-    </div>
+    <main layout:fragment="content">
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Locker Management</h2>
+                <a th:href="@{/admin/lockers/new}" class="btn btn-primary">+ Add New Locker</a>
+            </div>
 
-    <div th:if="${successMessage}" class="alert alert-success py-2" role="alert" th:text="${successMessage}"></div>
-    <div th:if="${errorMessage}" class="alert alert-danger py-2" role="alert" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="alert alert-success py-2" role="alert" th:text="${successMessage}">
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger py-2" role="alert" th:text="${errorMessage}"></div>
 
-    <!-- Bootstrap 5 Tabs -->
-    <ul class="nav nav-tabs mb-3" id="lockerTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-semibold" id="men-tab" data-bs-toggle="tab" data-bs-target="#men-pane" type="button" role="tab">Men's Section</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link fw-semibold" id="women-tab" data-bs-toggle="tab" data-bs-target="#women-pane" type="button" role="tab">Women's Section</button>
-        </li>
-    </ul>
+            <!-- Bootstrap 5 Tabs -->
+            <ul class="nav nav-tabs mb-3" id="lockerTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active fw-semibold" id="men-tab" data-bs-toggle="tab"
+                        data-bs-target="#men-pane" type="button" role="tab">Men's Section</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fw-semibold" id="women-tab" data-bs-toggle="tab"
+                        data-bs-target="#women-pane" type="button" role="tab">Women's Section</button>
+                </li>
+            </ul>
 
-    <div class="tab-content" id="lockerTabsContent">
-        <!-- Men's Lockers Pane -->
-        <div class="tab-pane fade show active" id="men-pane" role="tabpanel">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-0 table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">#</th>
-                            <th>Locker Number</th>
-                            <th>Hardware IP</th>
-                            <th class="pe-4">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="locker, stat : ${mensLockers}">
-                            <td class="ps-4 text-muted" th:text="${stat.count}">1</td>
-                            <td class="fw-semibold" th:text="${locker.lockerNumber}">M-101</td>
-                            <td th:text="${locker.hardwareIp != null ? locker.hardwareIp : '-'}">-</td>
-                            <td class="pe-4">
-                                <form th:action="@{/admin/lockers/{id}/status(id=${locker.id})}" method="post" class="m-0">
-                                    <select name="status" class="form-select form-select-sm" style="width: 140px;" onchange="this.form.submit()" th:classappend="${locker.status.name() == 'EMPTY'} ? 'border-success' : (${locker.status.name() == 'OCCUPIED'} ? 'border-danger' : 'border-secondary')">
-                                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}" th:selected="${status == locker.status}"></option>
-                                    </select>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(mensLockers)}">
-                            <td colspan="4" class="text-center py-5 text-muted">No men's lockers configured.</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="tab-content" id="lockerTabsContent">
+                <!-- Men's Lockers Pane -->
+                <div class="tab-pane fade show active" id="men-pane" role="tabpanel">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">#</th>
+                                        <th>Locker Number</th>
+                                        <th>Hardware IP</th>
+                                        <th class="pe-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="locker, stat : ${mensLockers}">
+                                        <td class="ps-4 text-muted" th:text="${stat.count}">1</td>
+                                        <td class="fw-semibold" th:text="${locker.lockerNumber}">M-101</td>
+                                        <td th:text="${locker.hardwareIp != null ? locker.hardwareIp : '-'}">-</td>
+                                        <td class="pe-4">
+                                            <form th:action="@{/admin/lockers/{id}/status(id=${locker.id})}"
+                                                method="post" class="m-0">
+                                                <select name="status" class="form-select form-select-sm"
+                                                    style="width: 140px;" onchange="this.form.submit()"
+                                                    th:classappend="${locker.status.name() == 'EMPTY'} ? 'border-success' : (${locker.status.name() == 'OCCUPIED'} ? 'border-danger' : 'border-secondary')">
+                                                    <option th:each="status : ${statuses}" th:value="${status}"
+                                                        th:text="${status}" th:selected="${status == locker.status}">
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(mensLockers)}">
+                                        <td colspan="4" class="text-center py-5 text-muted">No men's lockers configured.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Women's Lockers Pane -->
+                <div class="tab-pane fade" id="women-pane" role="tabpanel">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="ps-4">#</th>
+                                        <th>Locker Number</th>
+                                        <th>Hardware IP</th>
+                                        <th class="pe-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="locker, stat : ${womensLockers}">
+                                        <td class="ps-4 text-muted" th:text="${stat.count}">1</td>
+                                        <td class="fw-semibold" th:text="${locker.lockerNumber}">W-101</td>
+                                        <td th:text="${locker.hardwareIp != null ? locker.hardwareIp : '-'}">-</td>
+                                        <td class="pe-4">
+                                            <form th:action="@{/admin/lockers/{id}/status(id=${locker.id})}"
+                                                method="post" class="m-0">
+                                                <select name="status" class="form-select form-select-sm"
+                                                    style="width: 140px;" onchange="this.form.submit()"
+                                                    th:classappend="${locker.status.name() == 'EMPTY'} ? 'border-success' : (${locker.status.name() == 'OCCUPIED'} ? 'border-danger' : 'border-secondary')">
+                                                    <option th:each="status : ${statuses}" th:value="${status}"
+                                                        th:text="${status}" th:selected="${status == locker.status}">
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(womensLockers)}">
+                                        <td colspan="4" class="text-center py-5 text-muted">No women's lockers
+                                            configured.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <!-- Women's Lockers Pane -->
-        <div class="tab-pane fade" id="women-pane" role="tabpanel">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-0 table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">#</th>
-                            <th>Locker Number</th>
-                            <th>Hardware IP</th>
-                            <th class="pe-4">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="locker, stat : ${womensLockers}">
-                            <td class="ps-4 text-muted" th:text="${stat.count}">1</td>
-                            <td class="fw-semibold" th:text="${locker.lockerNumber}">W-101</td>
-                            <td th:text="${locker.hardwareIp != null ? locker.hardwareIp : '-'}">-</td>
-                            <td class="pe-4">
-                                <form th:action="@{/admin/lockers/{id}/status(id=${locker.id})}" method="post" class="m-0">
-                                    <select name="status" class="form-select form-select-sm" style="width: 140px;" onchange="this.form.submit()" th:classappend="${locker.status.name() == 'EMPTY'} ? 'border-success' : (${locker.status.name() == 'OCCUPIED'} ? 'border-danger' : 'border-secondary')">
-                                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}" th:selected="${status == locker.status}"></option>
-                                    </select>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(womensLockers)}">
-                            <td colspan="4" class="text-center py-5 text-muted">No women's lockers configured.</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

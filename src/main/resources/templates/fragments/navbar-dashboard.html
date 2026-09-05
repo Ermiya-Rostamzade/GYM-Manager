@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" th:href="@{/dashboard}">My Dashboard</a>
+
+        <div class="navbar-nav me-auto">
+            <a class="nav-link" th:href="@{/}">Home</a>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-light d-none d-md-inline"></span>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    </div>
+</nav>

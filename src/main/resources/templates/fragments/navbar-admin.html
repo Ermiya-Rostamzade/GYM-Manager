@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" th:href="@{/admin}">Admin Panel</a>
+
+        <div class="navbar-nav me-auto">
+            <a class="nav-link" th:href="@{/admin/users}">Users</a>
+            <a class="nav-link" th:href="@{/admin/plans}">Plans</a>
+            <a class="nav-link" th:href="@{/admin/lockers}">Lockers</a>
+            <a class="nav-link" th:href="@{/}">Home</a>
+        </div>
+        <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="m-0">
+            <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+        </form>
+    </div>
+
+    </div>
+</nav>

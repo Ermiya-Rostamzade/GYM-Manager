@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/public}">
+
+<head>
+    <title>Home</title>
+    <style>
+        :root {
+            --ink: #17202a;
+            --muted: #667085;
+            --lime: #c7f36b;
+            --orange: #ff7849;
+            --soft: #f5f7f2;
+        }
+
+        body {
+            color: var(--ink);
+            background: var(--soft) !important;
+            text-align: left;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            min-height: 455px;
+            border-radius: 28px;
+            background: linear-gradient(118deg, #17202a 0%, #253746 62%, #344d58 100%);
+            isolation: isolate;
+        }
+
+        .hero::before,
+        .hero::after {
+            position: absolute;
+            z-index: -1;
+            border-radius: 50%;
+            content: "";
+        }
+
+        .hero::before {
+            top: -145px;
+            right: -80px;
+            width: 390px;
+            height: 390px;
+            background: var(--lime);
+            opacity: .92;
+        }
+
+        .hero::after {
+            right: 24%;
+            bottom: -175px;
+            width: 330px;
+            height: 330px;
+            border: 52px solid var(--orange);
+            opacity: .85;
+        }
+
+        .hero-copy {
+            max-width: 650px;
+        }
+
+        .eyebrow {
+            color: var(--lime);
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.7rem, 6vw, 5.4rem);
+            letter-spacing: -.04em;
+            line-height: .95;
+        }
+
+        .hero p {
+            color: #d7e0e3;
+            font-size: 1.1rem;
+            max-width: 510px;
+        }
+
+        .btn-lime {
+            background: var(--lime);
+            border-color: var(--lime);
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .btn-lime:hover {
+            background: #d8ff86;
+            border-color: #d8ff86;
+            color: var(--ink);
+        }
+
+        .stat-strip {
+            background: #fff;
+            border: 1px solid #e6e9e5;
+            border-radius: 18px;
+        }
+
+        .stat-number {
+            color: var(--orange);
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .feature-card {
+            background: transparent;
+            border: 0;
+        }
+
+        .feature-icon {
+            display: inline-grid;
+            width: 44px;
+            height: 44px;
+            place-items: center;
+            border-radius: 14px;
+            background: var(--lime);
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <main layout:fragment="content" class="container py-4 py-lg-5">
+        <section class="hero d-flex align-items-center p-4 p-md-5 shadow-sm">
+            <div class="hero-copy">
+                <div class="eyebrow mb-3">Your stronger routine starts here</div>
+                <h1 class="text-white fw-bold mb-4">Welcome to your stronger routine</h1>
+                <p class="mb-4">Everything you need to manage workouts, memberships, and member progress in one
+                    simple, professional space.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a th:href="@{/register}" class="btn btn-lime btn-lg px-4">Get started</a>
+                    <a th:href="@{/login}" class="btn btn-outline-light btn-lg px-4">Log in</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="stat-strip row g-0 my-4 py-3 text-center shadow-sm">
+            <div class="col-4 border-end">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Always with you</div>
+            </div>
+            <div class="col-4 border-end">
+                <div class="stat-number">+100</div>
+                <div class="stat-label">Focused workouts</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Unified experience</div>
+            </div>
+        </section>
+
+        <section class="row g-4 px-2 px-md-3 py-2">
+            <div class="col-md-4 feature-card">
+                <div class="feature-icon mb-3">⌁</div>
+                <h2 class="h5 fw-bold">Simple planning</h2>
+                <p class="text-secondary mb-0">Keep track of your workout plan and membership without the
+                    complexity.</p>
+            </div>
+            <div class="col-md-4 feature-card">
+                <div class="feature-icon mb-3">◉</div>
+                <h2 class="h5 fw-bold">Visible progress</h2>
+                <p class="text-secondary mb-0">Use organized information to choose your next step with confidence.
+                </p>
+            </div>
+            <div class="col-md-4 feature-card">
+                <div class="feature-icon mb-3">✦</div>
+                <h2 class="h5 fw-bold">Made for you</h2>
+                <p class="text-secondary mb-0">Your gym, facilities, and goals, all in one clear view.</p>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

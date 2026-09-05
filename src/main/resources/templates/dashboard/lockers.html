@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/dashboard}">
+
+<head>
+    <title>Locker Map</title>
+</head>
+
+<body>
+
+    <main layout:fragment="content">
+        <div class="container mt-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+                <div>
+                    <h2>Locker Map</h2>
+                    <p class="text-muted mb-0">Select an available locker to reserve for your session.</p>
+                </div>
+
+                <div class="btn-group" role="group">
+                    <a th:href="@{/dashboard/lockers?section=MEN}" class="btn"
+                        th:classappend="${currentSection.name() == 'MEN'} ? 'btn-primary' : 'btn-outline-primary'">Men's
+                        Area</a>
+                    <a th:href="@{/dashboard/lockers?section=WOMEN}" class="btn"
+                        th:classappend="${currentSection.name() == 'WOMEN'} ? 'btn-primary' : 'btn-outline-primary'">Women's
+                        Area</a>
+                </div>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${activeReservation != null}" class="card bg-dark text-white shadow mb-4 border-0 rounded-4">
+                <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div>
+                        <p class="text-info mb-1 text-uppercase fw-bold small">Active Reservation</p>
+                        <h3 class="mb-0 fw-bold" th:text="${activeReservation.locker.lockerNumber}">M-101</h3>
+                    </div>
+                    <form th:action="@{/dashboard/lockers/release}" method="post" class="m-0">
+                        <input type="hidden" name="section" th:value="${currentSection}">
+                        <button type="submit" class="btn btn-danger fw-bold px-4">Release Locker</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-4 mb-4 small fw-semibold text-muted">
+                <div><span class="d-inline-block rounded-circle bg-success me-1"
+                        style="width:10px; height:10px;"></span> Available</div>
+                <div><span class="d-inline-block rounded-circle bg-danger me-1" style="width:10px; height:10px;"></span>
+                    Occupied</div>
+                <div><span class="d-inline-block rounded-circle bg-secondary me-1"
+                        style="width:10px; height:10px;"></span> Service</div>
+            </div>
+
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+                <div th:each="locker : ${lockers}" class="col">
+
+                    <form th:if="${locker.status.name() == 'EMPTY' && activeReservation == null}"
+                        th:action="@{/dashboard/lockers/reserve}" method="post" class="h-100">
+                        <input type="hidden" name="lockerId" th:value="${locker.id}">
+                        <input type="hidden" name="section" th:value="${currentSection}">
+                        <button type="submit"
+                            class="btn btn-outline-success w-100 h-100 py-4 d-flex flex-column align-items-center justify-content-center shadow-sm rounded-4">
+                            <h4 class="fw-bold mb-1" th:text="${locker.lockerNumber}">M-101</h4>
+                            <span class="badge bg-success">Select</span>
+                        </button>
+                    </form>
+
+                    <div th:unless="${locker.status.name() == 'EMPTY' && activeReservation == null}"
+                        class="card h-100 py-4 d-flex flex-column align-items-center justify-content-center border shadow-sm rounded-4"
+                        th:classappend="${locker.status.name() == 'OCCUPIED' ? 'bg-danger-subtle border-danger' : 'bg-light border-secondary'}">
+                        <h4 class="fw-bold mb-1"
+                            th:classappend="${locker.status.name() == 'OCCUPIED' ? 'text-danger' : 'text-secondary'}"
+                            th:text="${locker.lockerNumber}">M-102</h4>
+                        <span class="badge"
+                            th:classappend="${locker.status.name() == 'OCCUPIED' ? 'bg-danger' : 'bg-secondary'}"
+                            th:text="${locker.status.name() == 'EMPTY' ? 'Locked' : (locker.status.name() == 'OCCUPIED' ? 'Occupied' : 'Service')}"></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(lockers)}"
+                class="text-center p-5 border border-dashed rounded-4 text-muted mt-3">
+                <h5>No lockers configured for this area.</h5>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/dashboard}">
+
+<head>
+    <title>Traffic Logs</title>
+</head>
+
+<body>
+
+    <main layout:fragment="content">
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Your Traffic Logs</h2>
+                <a th:href="@{/dashboard/traffic-log/check-in}" class="btn btn-primary">Check In</a>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger py-2" role="alert" th:text="${errorMessage}"></div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0 table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">#</th>
+                                <th>Check In Time</th>
+                                <th>Check Out Time</th>
+                                <th>Method</th>
+                                <th class="text-end pe-4">Status / Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="trafficLog, trafficLogStat : ${trafficLogs}">
+                                <td class="ps-4 text-muted" th:text="${trafficLogStat.count}">1</td>
+                                <td th:text="${#temporals.format(trafficLog.checkInTime, 'yyyy MMM dd, HH:mm')}"></td>
+                                <td
+                                    th:text="${trafficLog.checkOutTime != null ? #temporals.format(trafficLog.checkOutTime, 'yyyy MMM dd, HH:mm') : '-'}">
+                                </td>
+                                <td><span class="badge bg-secondary" th:text="${trafficLog.entryMethod}"></span></td>
+                                <td class="text-end pe-4">
+                                    <form th:if="${trafficLog.checkOutTime == null}"
+                                        th:action="@{/dashboard/traffic-log/check-out/{id}(id=${trafficLog.id})}"
+                                        method="post" class="m-0">
+                                        <button type="submit" class="btn btn-sm btn-danger fw-bold"
+                                            onclick="return confirm('Do you want to check out?');">Check Out</button>
+                                    </form>
+                                    <span th:unless="${trafficLog.checkOutTime == null}"
+                                        class="text-success fw-bold"><small>Done</small></span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(trafficLogs)}">
+                                <td colspan="5" class="text-center py-5 text-muted">No traffic logs found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

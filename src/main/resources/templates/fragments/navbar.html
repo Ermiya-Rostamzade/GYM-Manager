@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            Gym Management
+        </a>
+
+        <div class="navbar-nav me-auto">
+            <a class="nav-link" href="#">About us</a>
+            <a class="nav-link" href="#">Support</a>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <a th:href="@{/admin}" sec:authorize="isAuthenticated() && hasRole('ADMIN')"
+                class="btn btn-sm btn-outline-light">Admin Panel</a>
+            <a th:href="@{/dashboard}" sec:authorize="isAuthenticated() && !hasRole('ADMIN')"
+                class="btn btn-sm btn-outline-light">Dashboard</a>
+            <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn btn-sm btn-outline-light">Log in</a>
+            <a th:href="@{/register}" sec:authorize="!isAuthenticated()" class="btn btn-sm btn-light">Register</a>
+        </div>
+    </div>
+</nav>
