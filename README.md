@@ -16,6 +16,7 @@
   <img src="https://img.shields.io/badge/MapStruct-Latest-E53935?style=for-the-badge&logo=mapstruct&logoColor=white" alt="MapStruct" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
 </p>
+<br>
 
 <p align="center">
   <img src="docs/demo.gif" alt="GYM-Manager Demo" width="90%"" />
