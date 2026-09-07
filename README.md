@@ -37,9 +37,8 @@ The system automates the complete operational lifecycle of a gym: member onboard
 * 💳 **Payments** — Transaction logs tied to subscriptions, tracking payment states and bank ref codes.
 * ⏱️ **Traffic Logs** — Automated check-in and check-out logs validating physical facility visits.
 * 🔐 **Lockers** — Gender-segregated locker management featuring hardware controller IP mapping.
-* 🔑 **Locker Reservations** — Active and historical locker assignments linked to athlete visits.
+* 🔑 **Locker Reservations** — Athletes can select and reserve an available locker during their visit, with active and historical assignments tracked.
 * 🛡️ **Roles & Permissions** — Dynamic, decoupled permission assignment.
-* 🔔 **Notifications** — Targeted system notifications dispatched to users.
 
 ---
 
