@@ -26,7 +26,7 @@
 
 ## 📌 Overview
 
-A modern gym and sports complex management platform built with **Java 17+** and **Spring Boot 3.x**. 
+A modern gym and sports complex management platform built with **Java 21+** and **Spring Boot 4.x**. 
 
 The system automates the complete operational lifecycle of a gym: member onboarding, subscription packages, online payments, facility entry/exit tracking (QR Code, RFID, Biometrics), smart locker allocations with hardware integration capabilities, and granular role-based security.
 
@@ -138,8 +138,8 @@ erDiagram
 
 | Technology | Role / Usage |
 | :--- | :--- |
-| **Java 17+** | Core programming language leveraging modern features (Records, Sealed Types) |
-| **Spring Boot 3.x** | Core application framework & dependency injection engine |
+| **Java 21+** | Core programming language leveraging modern features (Records, Sealed Types) |
+| **Spring Boot 4.x** | Core application framework & dependency injection engine |
 | **Spring Data JPA** | Data access abstraction and dynamic query generation |
 | **Spring Security** | Role-based authorization, custom user details authentication, and endpoint filters |
 | **Hibernate ORM** | Object-Relational Mapping, lifecycle callbacks, and schema management |
