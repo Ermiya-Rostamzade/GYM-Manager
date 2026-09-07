@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/demo.gif" alt="GYM-Manager Demo" width="82%"" />
+  <img src="docs/demo.gif" alt="GYM-Manager Demo" width="90%"" />
 </p>
 
 ---
